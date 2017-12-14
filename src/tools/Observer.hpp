@@ -131,7 +131,6 @@ std::vector<std::any> actions;
 //=======================>Constructors<=======================
 public:
 Observer() = default;
-// TODO: rule of five ? copyandswap
 virtual ~Observer()
 {
   names.empty();

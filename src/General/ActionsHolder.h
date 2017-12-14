@@ -8,29 +8,35 @@
 #ifndef ACTIONSHOLDER_H_
 #define ACTIONSHOLDER_H_
 
+#include <any>
 #include <functional>
-#include <map>
 #include <string>
-#include <tuple>
 #include <utility>
 
-#include "KeyAction.h"
+class CustomWindow;
 
 class ActionsHolder {
 //-------------------Attributes
 private:
-    /**
-     * isActive function will define wether or not the action is available depending on the context and type of action
-     */
-    std::map<char, KeyAction> registeredActions; //tuple contains key, description and isActive function
+//    std::map<char, KeyAction> registeredActions;
+    char key;
+    std::string description;
+    std::function<bool()> isActive;
+    std::function<std::any()> behaviour;
 
 //-------------------Constructors
 public:
-    ActionsHolder(std::tuple<std::string, std::string, std::function<bool()>>);
     /**
      *
-     * @return a pair which first element is the keyboard key and second is the action's description
+     * @param string is the action descrption (1 word or 2)
+     * First function is the isActive function that determines when the action is available
+     * Second function is the behaviour of hte action (what it does)
      */
+
+    //FIXME Choose whether or not ActionsHolder should contain the keyboard key and adapt accordingly
+    ActionsHolder(char key, std::string description,
+            std::function<bool()> isActive,
+            std::function<std::any()> behaviour);
     std::pair<std::string, std::string> generateActionLabels();
 
     virtual ~ActionsHolder();
@@ -39,7 +45,7 @@ private:
 
 //-------------------Methods
 public:
-
+    std::any doBehaviour();
 private:
 
 //-------------------Getters&Setters

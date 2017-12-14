@@ -5,22 +5,23 @@
  *      Author: anael
  */
 
-
 #include "RDPWindow.h"
 
 RDPWindow::RDPWindow(wxWindow* parent) :
         CustomWindow(parent, WindowType::RDP, "Raw data processing"), shouldNotclose {
                 false }, selectedImages { 0 } {
+    aH = new std::vector<ActionsHolder>();
 //    setActionsHolder();
-    allocatedKeys = 0;
-    preferredKeys.push_back('j');
-    preferredKeys.push_back('k');
-    preferredKeys.push_back('l');
-    preferredKeys.push_back('m');
-    preferredKeys.push_back('o');
-    preferredKeys.push_back('p');
-    preferredKeys.push_back('b');
-    preferredKeys.push_back('n');
+    addPreferredKey('j');
+    addPreferredKey('k');
+    addPreferredKey('l');
+    addPreferredKey('m');
+    addPreferredKey('n');
+    addPreferredKey('b');
+    addPreferredKey('o');
+    addPreferredKey('p');
+    addPreferredKey('h');
+
     escapeKey = WXK_ESCAPE;
 
     wT = WindowType::RDP;
@@ -66,9 +67,9 @@ void RDPWindow::keyPressed(wxKeyEvent& event) {
             if (pressedKey == 'x') {
             }
         }
-            if (pressedKey == WXK_ESCAPE) {
+        if (pressedKey == WXK_ESCAPE) {
             backHome();
-            }
+        }
         checkSelected();
         setActionsHolder();
     }
@@ -99,37 +100,24 @@ void RDPWindow::checkSelected() {
  */
 void RDPWindow::setActionsHolder() {
 
-    auto myLambda = [this]()->bool
+    aH->push_back(ActionsHolder(requestKey(), "Pick image", [this]()->bool
     {
         return true;
-    };
-//TODO here replace first key string with a call to allocatekey
-    auto tuple = std::tuple<std::string, std::string, std::function<bool()>>(
-            "esc", "Back to home", myLambda);
-//    auto myFunction = dynamic_cast<std::function<void*()>>(*backHome());
-//    addAction(myFunction, tuple);
-    addAction([this]() {
-        backHome();
-    }, tuple);
-
-
-//    addAction(
-//            std::tuple<std::string, std::string, std::function<bool()>>("esc",
-//                    "Back to home", [this]()->bool
-//                    {
-//                        return (selectedImages > 0);
-//                    }));
-
+    }, [this]()
+    {
+        this->pickImage();
+        /* SEE : Returning any doesn't allow void !! */
+        return 0;
+    }));
 }
 
+addAction(wxString("esc"), wxString("Back to Home"));
 
 
 //addAction(wxString("x"), wxString("Discard all"));
 //addAction(wxString("m"), wxString("Quick report"));
 //addAction(wxString("l"), wxString("Highlight features"));
 //addAction(wxString("k"), wxString("Mask RBC"));
-//addAction(wxString("j"), wxString("Select starting image"));
-//addAction(wxString("esc"), wxString("Back to Home"));
 
 void RDPWindow::maskRBC() {
 

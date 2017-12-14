@@ -11,13 +11,13 @@
 #include "wx/wx.h"
 #include "ImageWindow.h"
 #include "../General/ActionsList.h"
+#include "../General/ActionsHolder.h"
 #include <wx/sizer.h>
 #include "../CustomWindow.h"
 #include "../General/WindowType.h"
 #include "ScrolledList.h"
 #include <vector>
 #include <functional>
-#include <tuple>
 
 class RDPWindow: public CustomWindow {
 

@@ -14,6 +14,8 @@ CustomWindow::CustomWindow(wxWindow* parent, WindowType winType,
         wxFrame(parent, -1, name,
                 wxDefaultPosition, wxDefaultSize,
         wxSTAY_ON_TOP) {
+    aH = new std::vector<ActionsHolder>();
+    escapeKey = WXK_ESCAPE;
     wT = winType;
     actionWindow = new wxWindow(this, wxID_ANY);
     aL = new ActionsList(actionWindow);
@@ -25,6 +27,24 @@ CustomWindow::CustomWindow(wxWindow* parent, WindowType winType,
 
 ActionsList* CustomWindow::getAL() {
     return aL;
+}
+
+void CustomWindow::addPreferredKey(char c) {
+    preferredKeys.push_back(std::pair<char, bool>(c, false));
+
+}
+
+/**
+ * tries to find a non allocated key in preferredKeys. If found, marks the said key as allocated and gives the key to allocate
+ * @return a yet not allocated key
+ */
+char CustomWindow::requestKey() {
+    for (auto it = preferredKeys.begin(); it != preferredKeys.end(); ++it) {
+        if ((*it).second == false)
+            (*it).second = true;
+        return (*it).first;
+    }
+    return '\0';
 }
 
 CustomWindow::~CustomWindow() {

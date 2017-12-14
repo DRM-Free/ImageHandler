@@ -19,8 +19,6 @@
 
 class CustomWindow: public wxFrame, public Observed {
 
-    using voidFunction = std::function<void()>;
-
 public:
     CustomWindow(wxWindow* parent, WindowType winType, char const * name);
 //SEE Virtual method must be implemented in child class
@@ -31,7 +29,8 @@ public:
     ~CustomWindow();
 
     //new member functions
-    void addAction(voidFunction func, ActionsHolder act);
+    char requestKey();
+    void addPreferredKey(char c);
 private:
 protected:
     wxWindow* actionWindow;
@@ -41,15 +40,10 @@ protected:
     WindowType wT;
 
     //New members
-    std::vector<char> preferredKeys;
+    std::vector<std::pair<char, bool>> preferredKeys;
+    std::multimap<char, ActionsHolder>* aH;
     char escapeKey;
-    /**
-     * actions will contain associations between member methods and associated ActionHolder
-     * which includes keyboard key, action description and the activation function for the said action
-     * The function returns void* which is a generic pointer (any return type)
-     */
-    std::map<voidFunction, ActionsHolder> actions;
-    int allocatedKeys;
+
 };
 
 #endif /* CUSTOMWINDOW_H_ */

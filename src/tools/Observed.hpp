@@ -39,7 +39,6 @@ private:
 //=======================>Constructors<=======================
 public:
   Observed();
-  // TODO: rule of five ? copyandswap
   virtual ~Observed() = default;
 
 private:
