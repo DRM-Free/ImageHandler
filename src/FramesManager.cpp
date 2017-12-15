@@ -24,6 +24,7 @@ FramesManager::FramesManager(wxFrame* firstFrame) {
                 frames.push_back(content);
                 content->addObserver(this);
                 content->Center();
+                content->setActionsList();
                 content->Show(true);
             });
 

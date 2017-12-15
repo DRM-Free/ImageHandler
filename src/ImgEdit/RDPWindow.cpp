@@ -12,9 +12,7 @@ RDPWindow::RDPWindow(wxWindow* parent) :
                 false }, selectedImages { 0 } {
     aH = new std::vector<ActionsHolder>;
     setPreferredKeys();
-    setActionsList();
     escapeKey = WXK_ESCAPE;
-
     wT = WindowType::RDP;
     SelectedImageWindows = nullptr;
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -23,7 +21,6 @@ RDPWindow::RDPWindow(wxWindow* parent) :
     iW->forbidSelection();
     iL = new ScrolledList(this);
     aL = new ActionsList(this);
-    updateActionsList();
     aL->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
     iW->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
     iW->SetFocus();
@@ -73,7 +70,7 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
         return true;
     }, [this]()
     {
-                                this->backHome();
+                backHome();
         /* SEE : Returning any doesn't allow void !! */
         return 0;
             }));
@@ -86,7 +83,7 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
                             {
                                 this->pickImage();
                                 /* SEE : Returning any doesn't allow void !! */
-                                return 0;
+                return 0;
             }));
 
     for (auto it = aH->begin(); it != aH->end(); ++it) {

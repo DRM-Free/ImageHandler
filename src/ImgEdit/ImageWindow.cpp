@@ -100,13 +100,10 @@ wxSize ImageWindow::setBitMap() {
         delete bitmap;
         bitmap = nullptr;
     }
-    // proceed loading the file chosen by the user;
-    // this can be done with e.g. wxWidgets input streams:
 
     bitmap = new wxBitmap(openFileDialog.GetPath(), wxBITMAP_DEFAULT_TYPE);
     w = bitmap->GetWidth();
     h = bitmap->GetHeight();
-//    SetSizeHints(wxSize(280, 280), wxSize(2000, 2000), wxSize(600, 600));
     SetScrollbars(1, 1, w, h, 0, 0);
     Refresh();
     return wxSize(w, h);

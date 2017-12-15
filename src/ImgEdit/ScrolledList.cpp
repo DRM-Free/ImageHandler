@@ -45,13 +45,13 @@ void ScrolledList::updateSelectedBitmaps() {
     auto it = scrolledIconsLists->begin();
     if (it != scrolledIconsLists->end()) {
         *selectedBitmaps = *(*it)->getSelectedBitmaps();
-    }
+        std::vector<wxBitmap*> toMerge = *(*it)->getSelectedBitmaps();
     while (it != scrolledIconsLists->end()) {
         ++it;
-        std::vector<wxBitmap*> toMerge = *(*it)->getSelectedBitmaps();
         selectedBitmaps->reserve(selectedBitmaps->size() + toMerge.size()); // preallocate memory
         selectedBitmaps->insert(selectedBitmaps->end(), toMerge.begin(),
                 toMerge.end());
+    }
     }
 }
 

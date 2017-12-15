@@ -11,7 +11,6 @@ ReportWindow::ReportWindow(wxWindow* parent) :
         CustomWindow(parent, WindowType::RM, "Raw data processing"), shouldNotclose {
                 false } {
     setPreferredKeys();
-    setActionsList();
     rF = new ReportForm(this);
     rF->setForm();
     wT = WindowType::RM;
@@ -53,21 +52,21 @@ void ReportWindow::keyPressed(wxKeyEvent& event) {
 std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder() {
     std::vector<std::pair<std::string, std::string>> actionsL;
 
-    actionsL.push_back(std::make_pair("h", "Display contextual help"));
+
     aH->push_back(
-            ActionsHolder(escapeKey, "Display contextual help", [this]()->bool //
+            ActionsHolder(escapeKey, "Back Home", [this]()->bool //
                     {
                         return true;
                     }, [this]()
                     {
-                        this->displayContextualHelp();
+                backHome();
                         /* SEE : Returning any doesn't allow void !! */
                         return 0;
                     }));
 
     char key = requestKey(); //Request new available keyboard key
 
-    aH->push_back(ActionsHolder(escapeKey, "Submit report", [this]()->bool //
+    aH->push_back(ActionsHolder(key, "Submit report", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -78,7 +77,20 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 
     key = requestKey(); //Request new available keyboard key
 
-    aH->push_back(ActionsHolder(escapeKey, "Discard report", [this]()->bool //
+    aH->push_back(ActionsHolder(key, "Display contextual help", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                this->displayContextualHelp();
+                /* SEE : Returning any doesn't allow void !! */
+                return 0;
+            }));
+
+
+    key = requestKey(); //Request new available keyboard key
+
+    aH->push_back(ActionsHolder(key, "Discard report", [this]()->bool //
             {
                 return true;
             }, [this]()

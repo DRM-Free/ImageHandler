@@ -31,12 +31,12 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
 
 //    actionsL.push_back(std::make_pair("h", "Display contextual help"));
     aH->push_back(
-            ActionsHolder(escapeKey, "Display contextual help", [this]()->bool //
+            ActionsHolder(escapeKey, "Quit application", [this]()->bool //
                     {
                         return true;
                     }, [this]()
                     {
-                        this->displayContextualHelp();
+                this->Close(true);
                         /* SEE : Returning any doesn't allow void !! */
                         return 0;
                     }));
@@ -57,6 +57,16 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                 }
                 Hide();
                 /* SEE : Returning any doesn't allow void !! */
+                return 0;
+            }));
+
+    key = requestKey(); //Request new available keyboard key
+    aH->push_back(ActionsHolder(key, "Display contextual help", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                displayContextualHelp();
                 return 0;
             }));
 

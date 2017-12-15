@@ -45,12 +45,7 @@ ActionsList* CustomWindow::getAL() {
 void CustomWindow::keyPressed(wxKeyEvent& event) {
     wxChar pressedKey = event.GetUnicodeKey();
     if (pressedKey != WXK_NONE) {
-
-        if (pressedKey >= 32) {
-            //            wxLogMessage
-            //            ("You pressed '%c'", pressedKey);
-            doAction(std::any_cast<char>(pressedKey));
-            }
+        doAction(pressedKey);
         }
 
     }
@@ -107,7 +102,7 @@ void CustomWindow::freeKey(char c) {
 }
 
     void CustomWindow::doAction(char c) {
-        for (auto it = aH->begin(); it != aH->end(); ++it) {
+    for (auto it = aH->begin(); it != aH->end(); ++it) {
             if ((*it).getKey() == c) {
                 (*it).doBehaviour();
             }

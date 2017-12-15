@@ -36,7 +36,8 @@ std::pair<std::string, std::string> ActionsHolder::generateActionLabels() {
 
 std::any ActionsHolder::doBehaviour() {
     if (key != '\0') {
-        return behaviour();
+        behaviour();
+        return 1;
     } else {
         std::cerr
                 << "An action with no key assigned was called, this is not supposed to happen !\n";
