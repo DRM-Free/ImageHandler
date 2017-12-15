@@ -14,7 +14,7 @@ CustomWindow::CustomWindow(wxWindow* parent, WindowType winType,
         wxFrame(parent, -1, name,
                 wxDefaultPosition, wxDefaultSize,
         wxSTAY_ON_TOP) {
-    aH = new std::vector<ActionsHolder>();
+    aH = new std::vector<ActionsHolder>;
     escapeKey = WXK_ESCAPE;
     wT = winType;
     actionWindow = new wxWindow(this, wxID_ANY);
@@ -45,6 +45,14 @@ char CustomWindow::requestKey() {
         return (*it).first;
     }
     return '\0';
+}
+
+void CustomWindow::freeKey(char c) {
+    for (auto it = preferredKeys.begin(); it != preferredKeys.end(); ++it) {
+        if ((*it).first == c) {
+            (*it).second = false;
+        }
+    }
 }
 
 CustomWindow::~CustomWindow() {

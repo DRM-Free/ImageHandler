@@ -29,14 +29,13 @@ public:
     void setActionsHolder() override;
     void pickImage();
     void resumeImage(wxBitmap* bitmap);
-    void maskRBC();
-    void highlightFeatures();
     void backHome();
     void clearSelected();
-    void discardAll();
     bool isAllowedToClose();
     void checkSelected(); //Processes and updates the number of selected images
     void updateActionsList();
+    void updateActionsHolder();
+
 
     //Test function
     static bool returnTrue() {

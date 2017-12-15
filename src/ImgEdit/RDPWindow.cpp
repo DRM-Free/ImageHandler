@@ -10,7 +10,7 @@
 RDPWindow::RDPWindow(wxWindow* parent) :
         CustomWindow(parent, WindowType::RDP, "Raw data processing"), shouldNotclose {
                 false }, selectedImages { 0 } {
-    aH = new std::vector<ActionsHolder>();
+    aH = new std::vector<ActionsHolder>;
 //    setActionsHolder();
     addPreferredKey('j');
     addPreferredKey('k');
@@ -99,40 +99,58 @@ void RDPWindow::checkSelected() {
  *
  */
 void RDPWindow::setActionsHolder() {
-
-    aH->push_back(ActionsHolder(requestKey(), "Pick image", [this]()->bool
+    aH->push_back(ActionsHolder(escapeKey, "Back to Home", [this]()->bool //
     {
         return true;
     }, [this]()
     {
-        this->pickImage();
+                                this->backHome();
         /* SEE : Returning any doesn't allow void !! */
         return 0;
-    }));
+            }));
+
+    char key = requestKey(); //Request new available keyboard key
+    aH->push_back(ActionsHolder(key, "Pick image", [this]()->bool //
+                            {
+                                return true;
+                            }, [this]()
+                            {
+                                this->pickImage();
+                                /* SEE : Returning any doesn't allow void !! */
+                                return 0;
+            }));
 }
 
-addAction(wxString("esc"), wxString("Back to Home"));
+/**
+ *Checks what of the added actions are now active and make changes in ActionsHolders and registeredActions map
+ */
+void RDPWindow::updateActionsHolder() {
 
-
+}
+//addAction(wxString("esc"), wxString("Back to Home"));
 //addAction(wxString("x"), wxString("Discard all"));
 //addAction(wxString("m"), wxString("Quick report"));
 //addAction(wxString("l"), wxString("Highlight features"));
 //addAction(wxString("k"), wxString("Mask RBC"));
 
-void RDPWindow::maskRBC() {
-
-}
-void RDPWindow::highlightFeatures() {
-
+void RDPWindow::updateActionsList() {
+    for (auto it = aH->begin(); it != aH->end(); ++it) {
+    if ((*it).checkActive() && (*it).getKey() == '\0') {
+            char key = requestKey();
+            //SEE is that right to change both keys and values ?
+        (*it).setKey(key);
+        }
+        else if ((!(*it).checkActive()) && (*it).getKey() != '\0') {
+        freeKey((*it).getKey());
+        (*it).setKey('\0');
+        }
+    }
 }
 
 void RDPWindow::clearSelected() {
 
 }
 
-void RDPWindow::discardAll() {
-
-}
 
 bool RDPWindow::isAllowedToClose() {
     return shouldNotclose;

@@ -70,7 +70,10 @@ void ScrolledIconsList::appendBitmap(wxBitmap *Bitmap) {
     scrollWidth *= 2; //Because there is twice the same image to fit for testing
     std::cout << "scrollWidth set to " << scrollWidth << std::endl;
     SetMinClientSize(wxSize(300, 300));
-    SetScrollbars(1, 1, scrollWidth, 300, 300, 0);
+    int* x = new int;
+    int* y = new int;
+    GetSize(x, y);
+    SetScrollbars(1, 1, scrollWidth, *x + 5, 300, 0);
     Refresh();
 }
 

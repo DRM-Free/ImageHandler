@@ -15,17 +15,28 @@ ScrolledList::ScrolledList(wxWindow* parent) :
     sizer = new wxBoxSizer(wxVERTICAL);
     scrolledIconsLists = new std::vector<ScrolledIconsList*>;
     SetMinClientSize(wxSize(300, 500));
-    SetScrollbars(1, 1, 500, 500, 0, 0);
+//    SetScrollbars(1, 1, 500, 500, 0, 0);
 
     SetSizer(sizer);
+
+    int* x = new int;
+    int* y = new int;
+    GetSize(x, y);
+
+    SetScrollbars(0, 1, 0, *y + 5, 0, 0);
 }
 
 void ScrolledList::addScrolledIconsList(ScrolledIconsList* list) {
     scrolledIconsLists->push_back(list);
     sizer->Add(list, 1, wxEXPAND);
     int scrollHeight = (scrolledIconsLists->size()) * 280 + 10;
-    std::cout << "scrollHeight set to " << scrollHeight << std::endl;
-    SetScrollbars(0, 1, 0, scrollHeight, 0, 0);
+
+    int* x = new int;
+    int* y = new int;
+    GetSize(x, y);
+
+    std::cout << "scrollHeight set to " << *y + 5 << std::endl;
+    SetScrollbars(0, 1, 0, *y + 5, 0, 0);
 
     Refresh();
 }

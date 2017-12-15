@@ -39,3 +39,16 @@ std::any ActionsHolder::doBehaviour() {
         return 1;
     }
 }
+
+bool ActionsHolder::checkActive() {
+    return isActive();
+}
+
+char ActionsHolder::getKey() {
+    return key;
+}
+
+void ActionsHolder::setKey(char c) {
+    key = c;
+}
+

@@ -14,7 +14,6 @@
 #include "tools/Observed.hpp"
 #include <vector>
 #include "General/ActionsHolder.h"
-#include <map>
 #include <functional>
 
 class CustomWindow: public wxFrame, public Observed {
@@ -30,6 +29,7 @@ public:
 
     //new member functions
     char requestKey();
+    void freeKey(char);
     void addPreferredKey(char c);
 private:
 protected:
@@ -41,7 +41,7 @@ protected:
 
     //New members
     std::vector<std::pair<char, bool>> preferredKeys;
-    std::multimap<char, ActionsHolder>* aH;
+    std::vector<ActionsHolder>* aH;
     char escapeKey;
 
 };

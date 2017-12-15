@@ -46,11 +46,13 @@ private:
 //-------------------Methods
 public:
     std::any doBehaviour();
+    bool checkActive();
 private:
 
 //-------------------Getters&Setters
 public:
-
+    char getKey();
+    void setKey(char);
 private:
 
 };
