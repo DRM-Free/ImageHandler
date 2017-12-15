@@ -18,6 +18,7 @@
 #include "ScrolledList.h"
 #include <vector>
 #include <functional>
+#include <string>
 
 class RDPWindow: public CustomWindow {
 
@@ -25,16 +26,15 @@ public:
     //TODO Change what actions are available depending on what number of images is selected (no image selected / one or more...)
     RDPWindow(wxWindow* parent);
     void displayContextualHelp() override;
-    void keyPressed(wxKeyEvent& event) override;
-    void setActionsHolder() override;
+    void keyPressed(wxKeyEvent& event);
     void pickImage();
     void resumeImage(wxBitmap* bitmap);
     void backHome();
     void clearSelected();
     bool isAllowedToClose();
     void checkSelected(); //Processes and updates the number of selected images
-    void updateActionsList();
-    void updateActionsHolder();
+    std::vector<std::pair<std::string, std::string>> setActionsHolder()
+            override;
 
 
     //Test function

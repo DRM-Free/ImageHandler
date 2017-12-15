@@ -32,7 +32,7 @@ RDPWindow::RDPWindow(wxWindow* parent) :
     iW->forbidSelection();
     iL = new ScrolledList(this);
     aL = new ActionsList(this);
-    aL->setList(wT);
+    updateActionsList();
     aL->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
     iW->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
     iW->SetFocus();
@@ -48,32 +48,7 @@ void RDPWindow::displayContextualHelp() {
 }
 
 void RDPWindow::keyPressed(wxKeyEvent& event) {
-    wxChar pressedKey = event.GetUnicodeKey();
-
-    if (pressedKey != WXK_NONE) {
-
-        if (pressedKey >= 32) {
-            //            wxLogMessage
-            //            ("You pressed '%c'", pressedKey);
-            if (pressedKey == 'j') {
-                pickImage();
-            }
-            if (pressedKey == 'k') {
-            }
-            if (pressedKey == 'l') {
-            }
-            if (pressedKey == 'm') {
-            }
-            if (pressedKey == 'x') {
-            }
-        }
-        if (pressedKey == WXK_ESCAPE) {
-            backHome();
-        }
-        checkSelected();
-        setActionsHolder();
-    }
-
+    CustomWindow::keyPressed(event);
     iL->updateSelectedBitmaps();
 }
 
@@ -98,7 +73,10 @@ void RDPWindow::checkSelected() {
  * Time to associate all actionHolders to their RDPWindow member functions
  *
  */
-void RDPWindow::setActionsHolder() {
+std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
+    std::vector<std::pair<std::string, std::string>> actionsL;
+
+    actionsL.push_back(std::make_pair("Esc", "Back to Home"));
     aH->push_back(ActionsHolder(escapeKey, "Back to Home", [this]()->bool //
     {
         return true;
@@ -110,6 +88,8 @@ void RDPWindow::setActionsHolder() {
             }));
 
     char key = requestKey(); //Request new available keyboard key
+    actionsL.push_back(
+            std::make_pair(std::any_cast<std::string>(key), "Pick image"));
     aH->push_back(ActionsHolder(key, "Pick image", [this]()->bool //
                             {
                                 return true;
@@ -119,33 +99,21 @@ void RDPWindow::setActionsHolder() {
                                 /* SEE : Returning any doesn't allow void !! */
                                 return 0;
             }));
+
+    return actionsL;
 }
 
 /**
  *Checks what of the added actions are now active and make changes in ActionsHolders and registeredActions map
  */
-void RDPWindow::updateActionsHolder() {
 
-}
 //addAction(wxString("esc"), wxString("Back to Home"));
 //addAction(wxString("x"), wxString("Discard all"));
 //addAction(wxString("m"), wxString("Quick report"));
 //addAction(wxString("l"), wxString("Highlight features"));
 //addAction(wxString("k"), wxString("Mask RBC"));
 
-void RDPWindow::updateActionsList() {
-    for (auto it = aH->begin(); it != aH->end(); ++it) {
-    if ((*it).checkActive() && (*it).getKey() == '\0') {
-            char key = requestKey();
-            //SEE is that right to change both keys and values ?
-        (*it).setKey(key);
-        }
-        else if ((!(*it).checkActive()) && (*it).getKey() != '\0') {
-        freeKey((*it).getKey());
-        (*it).setKey('\0');
-        }
-    }
-}
+
 
 void RDPWindow::clearSelected() {
 

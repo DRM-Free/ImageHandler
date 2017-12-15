@@ -23,39 +23,24 @@ ActionsList::ActionsList(wxWindow* parent) :
     InsertColumn(1, col1);
 }
 
+void ActionsList::resetList(
+        std::vector<std::pair<std::string, std::string>> actions) {
+    DeleteAllItems();
+    for (auto it = actions.begin(); it != actions.end(); ++it) {
+        addAction((*it).first, (*it).second);
+    }
+}
+
 ActionsList::~ActionsList() {
 
 }
 
 
 
-void ActionsList::setList(WindowType wT) {
-    DeleteAllItems();
-    switch (wT) {
-
-    case WindowType::HOME_WINDOW:
-        addAction(wxString("m"), wxString("Process raw data"));
-        addAction(wxString("l"), wxString("Manage reports"));
-        addAction(wxString("k"), wxString("Manage patients"));
-        addAction(wxString("esc"), wxString("Exit"));
-        break;
-
-    case WindowType::RDP:
-        addAction(wxString("x"), wxString("Discard all"));
-        addAction(wxString("m"), wxString("Quick report"));
-        addAction(wxString("l"), wxString("Highlight features"));
-        addAction(wxString("k"), wxString("Mask RBC"));
-        addAction(wxString("j"), wxString("Select starting image"));
-        addAction(wxString("esc"), wxString("Back to Home"));
-        break;
-    case WindowType::RM:
-        addAction(wxString("x"), wxString("Discard all"));
-        addAction(wxString("m"), wxString("Submit report"));
-        addAction(wxString("l"), wxString("Add report element"));
-        addAction(wxString("esc"), wxString("Back to Home"));
-        break;
-    default:
-        break;
+void ActionsList::setList(
+        std::vector<std::pair<std::string, std::string>> actions) {
+    for (auto it = actions.begin(); it != actions.end(); ++it) {
+        addAction((*it).first, (*it).second);
     }
 }
 
@@ -67,3 +52,8 @@ void ActionsList::addAction(wxString key, wxString description) {
 void setImageTransforms(int numberSelected) {
 
 }
+//SEE report window possible actions
+//        addAction(wxString("x"), wxString("Discard all"));
+//        addAction(wxString("m"), wxString("Submit report"));
+//        addAction(wxString("l"), wxString("Add report element"));
+//        addAction(wxString("esc"), wxString("Back to Home"));

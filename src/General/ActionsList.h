@@ -11,13 +11,15 @@
 #include "wx/wx.h"
 #include <wx/listctrl.h>
 #include "WindowType.h"
+#include <string>
+#include <vector>
 
 class ActionsList: public wxListCtrl {
 public:
     ActionsList(wxWindow* parent);
     ~ActionsList();
-    //TODO: replace current setList with something else exploiting ActionsHolder class
-    void setList(WindowType wT);
+    void setList(std::vector<std::pair<std::string, std::string>> actions);
+    void resetList(std::vector<std::pair<std::string, std::string>> actions);
     void addAction(wxString key, wxString description);
     void setImageTransforms(int numberSelected);
 private:

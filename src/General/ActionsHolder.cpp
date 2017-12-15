@@ -25,7 +25,7 @@ ActionsHolder::~ActionsHolder() {
 
 std::pair<std::string, std::string> ActionsHolder::generateActionLabels() {
 if (key != '\0') {return std::make_pair(std::any_cast<std::string>(key), description);}
-//TODO specify user the requirements to meet to make action available
+//TODO specify to user the requirements to meet to make action available
     else
         return std::make_pair("N/A", description);
 }

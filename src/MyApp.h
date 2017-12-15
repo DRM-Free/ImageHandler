@@ -19,11 +19,11 @@ private:
 public:
     virtual bool OnInit() {
     wxInitAllImageHandlers();
-    mainWindow = new HomeWindow();
+        mainWindow = new HomeWindow();
         frameManager = new FramesManager(mainWindow);
-    mainWindow->addObserver(frameManager);
+        mainWindow->addObserver(frameManager);
         SetTopWindow(mainWindow);
-    mainWindow->Show();
+        mainWindow->Show();
     return true;
     }
 };

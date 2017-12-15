@@ -14,31 +14,40 @@ HomeWindow::HomeWindow() :
                 "Home Window") {
     actionWindow = new wxWindow(this, wxID_ANY);
     aL = new ActionsList(actionWindow);
-    aL->setList(WindowType::HOME_WINDOW);
+    setActionsList();
     aL->Bind(wxEVT_CHAR, &HomeWindow::keyPressed, this);
     aL->SetFocus(); //Gives focus to aL, so user doesn't have to first click home window
     Centre();
 }
 
+/**
+ *
+ * @return a vector that will be used to fill in the actions list displayed to the user
+ * In the mean time, sets the list of actions possible for HomeWindow
+ */
+std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() {
+    std::vector<std::pair<std::string, std::string>> actionsL;
 
-HomeWindow::~HomeWindow() {
+    actionsL.push_back(std::make_pair("h", "Display contextual help"));
+    aH->push_back(
+            ActionsHolder(escapeKey, "Display contextual help", [this]()->bool //
+                    {
+                        return true;
+                    }, [this]()
+                    {
+                        this->displayContextualHelp();
+                        /* SEE : Returning any doesn't allow void !! */
+                        return 0;
+                    }));
 
-}
-
-void HomeWindow::keyPressed(wxKeyEvent& event) {
-
-    wxChar pressedKey = event.GetUnicodeKey();
-    if (pressedKey != WXK_NONE) {
-
-        if (pressedKey >= 32) {
-//            wxLogMessage
-//            ("You pressed '%c'", pressedKey);
-
-         if (pressedKey == 'h') {
-                displayContextualHelp();
-            }
-
-            if (pressedKey == 'l') {
+    char key = requestKey(); //Request new available keyboard key
+    actionsL.push_back(
+            std::make_pair(std::any_cast<std::string>(key), "New report"));
+    aH->push_back(ActionsHolder(key, "New report", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
                 ReportWindow *addWindow = new ReportWindow(this);
                 setChanged();
                 try {
@@ -48,11 +57,19 @@ void HomeWindow::keyPressed(wxKeyEvent& event) {
                     std::cerr << e.what() << '\n';
                 }
                 Hide();
-            }
+                /* SEE : Returning any doesn't allow void !! */
+                return 0;
+            }));
 
-
-
-            if (pressedKey == 'm') {
+    key = requestKey(); //Request new available keyboard key
+    actionsL.push_back(
+            std::make_pair(std::any_cast<std::string>(key),
+                    "Process raw data"));
+    aH->push_back(ActionsHolder(key, "Process raw data", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
                 RDPWindow *addWindow = new RDPWindow(this);
                 setChanged();
                 try {
@@ -62,28 +79,19 @@ void HomeWindow::keyPressed(wxKeyEvent& event) {
                     std::cerr << e.what() << '\n';
                 }
                 Hide();
+                /* SEE : Returning any doesn't allow void !! */
+                return 0;
+            }));
 
-         }
-         if (pressedKey == 'P') {
-         }
-
-         if (pressedKey == 'O') {
-
-         }
-
-         }
-
-         if (pressedKey == WXK_ESCAPE) {
-         Close();
-        }
-        Fit();
-    }
+    return actionsL;
 }
+
 
 void HomeWindow::displayContextualHelp() {
     std::cout << "This helps" << std::endl;
 }
 
-void HomeWindow::setActionsHolder() {
+
+HomeWindow::~HomeWindow() {
 
 }

@@ -22,15 +22,15 @@ public:
     CustomWindow(wxWindow* parent, WindowType winType, char const * name);
 //SEE Virtual method must be implemented in child class
     virtual void displayContextualHelp() =0;
-    virtual void keyPressed(wxKeyEvent& event) =0;
-    virtual void setActionsHolder() =0;
-    ActionsList* getAL();
-    ~CustomWindow();
-
-    //new member functions
+    void keyPressed(wxKeyEvent& event);
+    void addPreferredKey(char c);
     char requestKey();
     void freeKey(char);
-    void addPreferredKey(char c);
+    virtual std::vector<std::pair<std::string, std::string>> setActionsHolder() =0;
+    void setActionsList();
+    void updateActionsList(); //This calls updateActionsHolder by itself
+    void doAction(char c);
+    ~CustomWindow();
 private:
 protected:
     wxWindow* actionWindow;
@@ -38,12 +38,13 @@ protected:
     ActionsList* aL;
     wxBoxSizer *mainSizer; //For welcome window only
     WindowType wT;
-
-    //New members
     std::vector<std::pair<char, bool>> preferredKeys;
     std::vector<ActionsHolder>* aH;
     char escapeKey;
 
+    //Getters and setters
+public:
+    ActionsList* getAL();
 };
 
 #endif /* CUSTOMWINDOW_H_ */

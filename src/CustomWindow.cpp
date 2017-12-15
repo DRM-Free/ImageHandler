@@ -8,7 +8,6 @@
 
 #include "CustomWindow.h"
 
-
 CustomWindow::CustomWindow(wxWindow* parent, WindowType winType,
         char const * name) :
         wxFrame(parent, -1, name,
@@ -19,7 +18,7 @@ CustomWindow::CustomWindow(wxWindow* parent, WindowType winType,
     wT = winType;
     actionWindow = new wxWindow(this, wxID_ANY);
     aL = new ActionsList(actionWindow);
-    aL->setList(wT);
+    updateActionsList();
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
     mainSizer->Add(actionWindow);
     SetSizerAndFit (mainSizer);
@@ -29,9 +28,44 @@ ActionsList* CustomWindow::getAL() {
     return aL;
 }
 
+void CustomWindow::keyPressed(wxKeyEvent& event) {
+    wxChar pressedKey = event.GetUnicodeKey();
+    if (pressedKey != WXK_NONE) {
+
+        if (pressedKey >= 32) {
+            //            wxLogMessage
+            //            ("You pressed '%c'", pressedKey);
+            doAction(std::any_cast<char>(pressedKey));
+            }
+        }
+    }
+
 void CustomWindow::addPreferredKey(char c) {
     preferredKeys.push_back(std::pair<char, bool>(c, false));
 
+}
+
+std::vector<std::pair<std::string, std::string>> CustomWindow::setActionsHolder() {
+    std::vector<std::pair<std::string, std::string>> actionsL;
+    for (auto it = aH->begin(); it != aH->end(); ++it) {
+        if ((*it).checkActive() && (*it).getKey() == '\0') {
+            char key = requestKey();
+            (*it).setKey(key);
+        } else if ((!(*it).checkActive()) && (*it).getKey() != '\0') {
+            freeKey((*it).getKey());
+            (*it).setKey('\0');
+        }
+        actionsL.push_back((*it).generateActionLabels());
+    }
+    return actionsL;
+}
+
+void CustomWindow::setActionsList() {
+    aL->setList(setActionsHolder());
+}
+
+void CustomWindow::updateActionsList() {
+    aL->resetList(setActionsHolder());
 }
 
 /**
@@ -54,6 +88,14 @@ void CustomWindow::freeKey(char c) {
         }
     }
 }
+
+    void CustomWindow::doAction(char c) {
+        for (auto it = aH->begin(); it != aH->end(); ++it) {
+            if ((*it).getKey() == c) {
+                (*it).doBehaviour();
+            }
+        }
+    }
 
 CustomWindow::~CustomWindow() {
 

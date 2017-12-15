@@ -33,7 +33,6 @@ public:
      * Second function is the behaviour of hte action (what it does)
      */
 
-    //FIXME Choose whether or not ActionsHolder should contain the keyboard key and adapt accordingly
     ActionsHolder(char key, std::string description,
             std::function<bool()> isActive,
             std::function<std::any()> behaviour);

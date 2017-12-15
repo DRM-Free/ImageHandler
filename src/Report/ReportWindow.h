@@ -22,11 +22,12 @@ private:
 public:
     ReportWindow(wxWindow* parent);
     ~ReportWindow();
-    void keyPressed(wxKeyEvent& event) override;
+    void keyPressed(wxKeyEvent& event);
     void backHome();
     void addReportElement();
     void displayContextualHelp();
-    void setActionsHolder();
+    std::vector<std::pair<std::string, std::string>> setActionsHolder()
+            override;
 
 private:
     bool shouldNotclose;
