@@ -15,6 +15,7 @@
 #include <vector>
 #include "General/ActionsHolder.h"
 #include <functional>
+#include <utility>
 
 class CustomWindow: public wxFrame, public Observed {
 
@@ -27,9 +28,11 @@ public:
     char requestKey();
     void freeKey(char);
     virtual std::vector<std::pair<std::string, std::string>> setActionsHolder() =0;
+    std::vector<std::pair<std::string, std::string>> updateActionsHolder();
     void setActionsList();
     void updateActionsList(); //This calls updateActionsHolder by itself
     void doAction(char c);
+    void setPreferredKeys();
     ~CustomWindow();
 private:
 protected:
@@ -38,7 +41,7 @@ protected:
     ActionsList* aL;
     wxBoxSizer *mainSizer; //For welcome window only
     WindowType wT;
-    std::vector<std::pair<char, bool>> preferredKeys;
+    std::vector<std::pair<char, bool>> preferredKeys; //bool true if key is available
     std::vector<ActionsHolder>* aH;
     char escapeKey;
 

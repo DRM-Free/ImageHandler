@@ -18,10 +18,24 @@ CustomWindow::CustomWindow(wxWindow* parent, WindowType winType,
     wT = winType;
     actionWindow = new wxWindow(this, wxID_ANY);
     aL = new ActionsList(actionWindow);
-    updateActionsList();
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
     mainSizer->Add(actionWindow);
-    SetSizerAndFit (mainSizer);
+    SetSizerAndFit(mainSizer);
+    aL->SetFocus(); //Gives focus to aL, so user doesn't have to first click home window
+    Centre();
+    setPreferredKeys();
+}
+
+void CustomWindow::setPreferredKeys() {
+    addPreferredKey('j');
+    addPreferredKey('k');
+    addPreferredKey('l');
+    addPreferredKey('m');
+    addPreferredKey('n');
+    addPreferredKey('b');
+    addPreferredKey('o');
+    addPreferredKey('p');
+    addPreferredKey('h');
 }
 
 ActionsList* CustomWindow::getAL() {
@@ -38,14 +52,14 @@ void CustomWindow::keyPressed(wxKeyEvent& event) {
             doAction(std::any_cast<char>(pressedKey));
             }
         }
+
     }
 
 void CustomWindow::addPreferredKey(char c) {
-    preferredKeys.push_back(std::pair<char, bool>(c, false));
-
+    preferredKeys.push_back(std::pair<char, bool>(c, true));
 }
 
-std::vector<std::pair<std::string, std::string>> CustomWindow::setActionsHolder() {
+std::vector<std::pair<std::string, std::string>> CustomWindow::updateActionsHolder() {
     std::vector<std::pair<std::string, std::string>> actionsL;
     for (auto it = aH->begin(); it != aH->end(); ++it) {
         if ((*it).checkActive() && (*it).getKey() == '\0') {
@@ -55,6 +69,7 @@ std::vector<std::pair<std::string, std::string>> CustomWindow::setActionsHolder(
             freeKey((*it).getKey());
             (*it).setKey('\0');
         }
+
         actionsL.push_back((*it).generateActionLabels());
     }
     return actionsL;
@@ -74,10 +89,12 @@ void CustomWindow::updateActionsList() {
  */
 char CustomWindow::requestKey() {
     for (auto it = preferredKeys.begin(); it != preferredKeys.end(); ++it) {
-        if ((*it).second == false)
-            (*it).second = true;
-        return (*it).first;
+        if ((*it).second == true) {
+            (*it).second = false;
+            return (*it).first;
+        }
     }
+    std::cerr << "Unable to allocate keyboard key : no more free keys !\n";
     return '\0';
 }
 
@@ -100,3 +117,4 @@ void CustomWindow::freeKey(char c) {
 CustomWindow::~CustomWindow() {
 
 }
+

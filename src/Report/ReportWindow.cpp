@@ -10,13 +10,14 @@
 ReportWindow::ReportWindow(wxWindow* parent) :
         CustomWindow(parent, WindowType::RM, "Raw data processing"), shouldNotclose {
                 false } {
+    setPreferredKeys();
+    setActionsList();
     rF = new ReportForm(this);
     rF->setForm();
     wT = WindowType::RM;
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
     controlSizer = new wxBoxSizer(wxVERTICAL);
     aL = new ActionsList(this);
-    updateActionsList();
     aL->Bind(wxEVT_CHAR, &ReportWindow::keyPressed, this);
     aL->SetFocus();
     controlSizer->Add(aL);
@@ -66,8 +67,6 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 
     char key = requestKey(); //Request new available keyboard key
 
-    actionsL.push_back(
-            std::make_pair(std::any_cast<std::string>(key), "Submit report"));
     aH->push_back(ActionsHolder(escapeKey, "Submit report", [this]()->bool //
             {
                 return true;
@@ -79,8 +78,6 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 
     key = requestKey(); //Request new available keyboard key
 
-    actionsL.push_back(
-            std::make_pair(std::any_cast<std::string>(key), "Discard report"));
     aH->push_back(ActionsHolder(escapeKey, "Discard report", [this]()->bool //
             {
                 return true;
@@ -89,8 +86,14 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 //TODO call discard report
             return 0;
         }));
+    for (auto it = aH->begin(); it != aH->end(); ++it) {
+        actionsL.push_back((*it).generateActionLabels());
+    }
 
-
+//    actionsL.push_back(
+//            std::make_pair(std::any_cast<std::string>(key), "Submit report"));
+//    actionsL.push_back(
+//            std::make_pair(std::any_cast<std::string>(key), "Discard report"));
     return actionsL;
 }
 

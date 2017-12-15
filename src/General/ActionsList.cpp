@@ -26,9 +26,7 @@ ActionsList::ActionsList(wxWindow* parent) :
 void ActionsList::resetList(
         std::vector<std::pair<std::string, std::string>> actions) {
     DeleteAllItems();
-    for (auto it = actions.begin(); it != actions.end(); ++it) {
-        addAction((*it).first, (*it).second);
-    }
+    setList(actions);
 }
 
 ActionsList::~ActionsList() {
@@ -40,13 +38,15 @@ ActionsList::~ActionsList() {
 void ActionsList::setList(
         std::vector<std::pair<std::string, std::string>> actions) {
     for (auto it = actions.begin(); it != actions.end(); ++it) {
-        addAction((*it).first, (*it).second);
+        addAction(it->first, it->second);
     }
 }
 
 void ActionsList::addAction(wxString key, wxString description) {
     long itemIndex1 = InsertItem(0, key); //want this for col. 1
     SetItem(itemIndex1, 1, description); //want this for col. 2
+
+
 }
 
 void setImageTransforms(int numberSelected) {

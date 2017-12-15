@@ -20,6 +20,7 @@ public:
     virtual bool OnInit() {
     wxInitAllImageHandlers();
         mainWindow = new HomeWindow();
+        mainWindow->setActionsList();
         frameManager = new FramesManager(mainWindow);
         mainWindow->addObserver(frameManager);
         SetTopWindow(mainWindow);

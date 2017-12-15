@@ -23,7 +23,6 @@
 class RDPWindow: public CustomWindow {
 
 public:
-    //TODO Change what actions are available depending on what number of images is selected (no image selected / one or more...)
     RDPWindow(wxWindow* parent);
     void displayContextualHelp() override;
     void keyPressed(wxKeyEvent& event);
@@ -42,7 +41,6 @@ public:
         return true;
     }
 ;
-    //TODO: display different kind of processing options depending on which images are selected
     //TODO: add one "Make Tuple" method that puts selected images in a common set for quicker transformations involving this set of images
 private:
     bool shouldNotclose;

@@ -8,6 +8,7 @@
 #ifndef ACTIONSHOLDER_H_
 #define ACTIONSHOLDER_H_
 
+#include "wx/wx.h"
 #include <any>
 #include <functional>
 #include <string>

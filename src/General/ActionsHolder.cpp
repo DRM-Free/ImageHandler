@@ -24,10 +24,14 @@ ActionsHolder::~ActionsHolder() {
 }
 
 std::pair<std::string, std::string> ActionsHolder::generateActionLabels() {
-if (key != '\0') {return std::make_pair(std::any_cast<std::string>(key), description);}
-//TODO specify to user the requirements to meet to make action available
-    else
+    if (key == '\0') {
         return std::make_pair("N/A", description);
+    }
+//TODO specify to user the requirements to meet to make action available
+    if (key == WXK_ESCAPE) {
+        return std::make_pair("Esc", description);
+    }
+    return std::make_pair(std::string(1, key), description);
 }
 
 std::any ActionsHolder::doBehaviour() {

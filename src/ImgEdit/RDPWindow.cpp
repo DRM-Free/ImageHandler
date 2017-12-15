@@ -11,17 +11,8 @@ RDPWindow::RDPWindow(wxWindow* parent) :
         CustomWindow(parent, WindowType::RDP, "Raw data processing"), shouldNotclose {
                 false }, selectedImages { 0 } {
     aH = new std::vector<ActionsHolder>;
-//    setActionsHolder();
-    addPreferredKey('j');
-    addPreferredKey('k');
-    addPreferredKey('l');
-    addPreferredKey('m');
-    addPreferredKey('n');
-    addPreferredKey('b');
-    addPreferredKey('o');
-    addPreferredKey('p');
-    addPreferredKey('h');
-
+    setPreferredKeys();
+    setActionsList();
     escapeKey = WXK_ESCAPE;
 
     wT = WindowType::RDP;
@@ -67,6 +58,7 @@ void RDPWindow::resumeImage(wxBitmap* bitmap) {
 
 void RDPWindow::checkSelected() {
     //TODO fill checkSelected !
+    selectedImages = iL->numberSelected();
 }
 
 /**
@@ -76,7 +68,6 @@ void RDPWindow::checkSelected() {
 std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
     std::vector<std::pair<std::string, std::string>> actionsL;
 
-    actionsL.push_back(std::make_pair("Esc", "Back to Home"));
     aH->push_back(ActionsHolder(escapeKey, "Back to Home", [this]()->bool //
     {
         return true;
@@ -88,8 +79,6 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
             }));
 
     char key = requestKey(); //Request new available keyboard key
-    actionsL.push_back(
-            std::make_pair(std::any_cast<std::string>(key), "Pick image"));
     aH->push_back(ActionsHolder(key, "Pick image", [this]()->bool //
                             {
                                 return true;
@@ -100,19 +89,20 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
                                 return 0;
             }));
 
+    for (auto it = aH->begin(); it != aH->end(); ++it) {
+        actionsL.push_back((*it).generateActionLabels());
+    }
+    //SEE the above loop must do the same as comments below :
+//    actionsL.push_back(std::make_pair("Esc", "Back to Home"));
+//    actionsL.push_back(
+//            std::make_pair(std::any_cast<std::string>(key), "Pick image"));
+
     return actionsL;
 }
 
 /**
  *Checks what of the added actions are now active and make changes in ActionsHolders and registeredActions map
  */
-
-//addAction(wxString("esc"), wxString("Back to Home"));
-//addAction(wxString("x"), wxString("Discard all"));
-//addAction(wxString("m"), wxString("Quick report"));
-//addAction(wxString("l"), wxString("Highlight features"));
-//addAction(wxString("k"), wxString("Mask RBC"));
-
 
 
 void RDPWindow::clearSelected() {
@@ -121,11 +111,11 @@ void RDPWindow::clearSelected() {
 
 
 bool RDPWindow::isAllowedToClose() {
-    return shouldNotclose;
+    return !shouldNotclose;
 }
 
 void RDPWindow::backHome() {
-    if (!shouldNotclose) {
+    if (isAllowedToClose()) {
         setChanged();
         try {
             notifyObserver(std::string("backHome"),

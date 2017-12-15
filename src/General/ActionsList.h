@@ -8,7 +8,7 @@
 #ifndef ACTIONSLIST_H_
 #define ACTIONSLIST_H_
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 #include <wx/listctrl.h>
 #include "WindowType.h"
 #include <string>

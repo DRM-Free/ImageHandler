@@ -10,14 +10,15 @@
 #include "Report/ReportWindow.h"
 
 HomeWindow::HomeWindow() :
-        CustomWindow(((wxFrame *) NULL), WindowType::HOME_WINDOW,
+        CustomWindow((wxFrame *) NULL, WindowType::HOME_WINDOW, // FIXME : nullptr -> (wxFrame *) NULL
                 "Home Window") {
-    actionWindow = new wxWindow(this, wxID_ANY);
-    aL = new ActionsList(actionWindow);
-    setActionsList();
+//    actionWindow = new wxWindow(this, wxID_ANY);
+//    aL = new ActionsList(actionWindow);
+    //SEE One can't call pure virtual method in child constructor !
+    //setActionsList can't be called right now, as it calls pure virtual method setActionsHolder before creation of the object
+//    setActionsList();
     aL->Bind(wxEVT_CHAR, &HomeWindow::keyPressed, this);
-    aL->SetFocus(); //Gives focus to aL, so user doesn't have to first click home window
-    Centre();
+
 }
 
 /**
@@ -28,7 +29,7 @@ HomeWindow::HomeWindow() :
 std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() {
     std::vector<std::pair<std::string, std::string>> actionsL;
 
-    actionsL.push_back(std::make_pair("h", "Display contextual help"));
+//    actionsL.push_back(std::make_pair("h", "Display contextual help"));
     aH->push_back(
             ActionsHolder(escapeKey, "Display contextual help", [this]()->bool //
                     {
@@ -41,8 +42,6 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                     }));
 
     char key = requestKey(); //Request new available keyboard key
-    actionsL.push_back(
-            std::make_pair(std::any_cast<std::string>(key), "New report"));
     aH->push_back(ActionsHolder(key, "New report", [this]()->bool //
             {
                 return true;
@@ -62,9 +61,6 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
             }));
 
     key = requestKey(); //Request new available keyboard key
-    actionsL.push_back(
-            std::make_pair(std::any_cast<std::string>(key),
-                    "Process raw data"));
     aH->push_back(ActionsHolder(key, "Process raw data", [this]()->bool //
             {
                 return true;
@@ -83,6 +79,13 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                 return 0;
             }));
 
+    for (auto it = aH->begin(); it != aH->end(); ++it) {
+        actionsL.push_back((*it).generateActionLabels());
+    }
+
+//    actionsL.push_back(std::make_pair(std::to_string(key), "Process raw data"));
+//    actionsL.push_back(
+//            std::make_pair(std::any_cast<std::string>(key), "New report"));
     return actionsL;
 }
 
