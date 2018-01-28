@@ -38,7 +38,6 @@ void ScrolledIconsList::setScrolls() {
     int* y = new int;
     GetSize(x, y);
     SetScrollbars(1, 1, *x + 5, 0, 300, 0);
-    std::cout << "scrollWidth set to " << *x + 5 << std::endl;
 }
 
 

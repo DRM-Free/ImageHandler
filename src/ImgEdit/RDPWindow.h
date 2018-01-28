@@ -19,6 +19,7 @@
 #include <vector>
 #include <functional>
 #include <string>
+#include "../process/image_processing.h"
 
 class RDPWindow: public CustomWindow {
 
@@ -29,12 +30,12 @@ public:
     void keyPressed(wxKeyEvent& event);
     void pickImage();
     void backHome();
-    void clearSelected();
     bool isAllowedToClose();
     void checkSelected(); //Processes and updates the number of selected images
     std::vector<std::pair<std::string, std::string>> setActionsHolder()
             override;
-
+    void processImage();
+    std::vector<ImageWindow> getSelectedImg();
 
     //Test function
     static bool returnTrue() {

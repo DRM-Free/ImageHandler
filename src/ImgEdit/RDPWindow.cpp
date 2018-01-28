@@ -107,6 +107,19 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
                 return 0;
             }));
 
+    key = requestKey(); //Request new available keyboard key
+    aH.push_back(ActionsHolder(key, "Clear selected", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                this->iL->clearSelected();
+                /* SEE : Returning any doesn't allow void !! */
+                return 0;
+            }));
+
+
+
     //###################### ADD NEW ACTIONS UP HERE ######################
 
     for (auto it = aH.begin(); it != aH.end(); ++it) {
@@ -123,10 +136,6 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
 /**
  *Checks what of the added actions are now active and make changes in ActionsHolders and registeredActions map
  */
-
-void RDPWindow::clearSelected() {
-
-}
 
 bool RDPWindow::isAllowedToClose() {
     return !shouldNotclose;
@@ -145,3 +154,5 @@ void RDPWindow::backHome() {
     }
 }
 
+void RDPWindow::processImage() {
+}
