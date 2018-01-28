@@ -1,5 +1,5 @@
 // Copyright Pierre-Jean LARTAUD
-// 5A GBM Polytech Lyon / M2 MISS Lyon1 
+// 5A GBM Polytech Lyon / M2 MISS Lyon1
 // 2017/2018
 
 //--------------------------------------------------------------------------//
@@ -20,11 +20,15 @@ using namespace std;
 
 vector<int> numeration (string img_path)
 {
-	system(("./numeration.m " + img_path).c_str()); //appel du script octave via le shell
+    cout << "Blood cells count called on" << img_path << "\n";
+
+    system(
+            ("/home/anael/eclipse-workspace/ImageProject2/Octave\\ Files/numeration.m "
+                    + img_path).c_str()); //appel du script octave via le shell
 
 	ifstream file("counts.mat", ios::in); // ouverture du fichier créé par le script octave
 	if(file) //on verifie l'ouverture du fichier
-	{		
+	{
 		//cout << "file open" << endl;
 		string line;
 		int GB_line = 4; // correspond aux lignes de chaque numeration de cellules
@@ -41,7 +45,7 @@ vector<int> numeration (string img_path)
 					stringstream S(line); // on se sert du stream pour transformer un string en int
 					S >> counts[0]; // et on récupère le nombre dans le tableau
 				}
-         	
+
 				if(i == GR_line) // meme chose pour les autres
 				{
 					stringstream S(line);
@@ -58,16 +62,18 @@ vector<int> numeration (string img_path)
 				{
 					stringstream S(line);
 					S >> counts[3];
-				}				
+				}
             i++;
         }
-    	const int destroy = remove("/home/pj/Progra/Polytech/5A/projet_5A/counts.mat"); // on détruit le fichier créé par le script
+        int const destroy = remove(
+                "/home/pj/Progra/Polytech/5A/projet_5A/counts.mat"); // on détruit le fichier créé par le script
 		return counts; // et on retourne le tableau
 	}
 	else
 	{
 		cout << "can't open file !" << endl; // on signale si impossible d'ouvrir
-    	const int destroy = remove("/home/pj/Progra/Polytech/5A/projet_5A/counts.mat");
+        int const destroy = remove(
+                "/home/pj/Progra/Polytech/5A/projet_5A/counts.mat");
 		exit(EXIT_FAILURE); // on sort du programme
 	}
 }
@@ -78,5 +84,8 @@ vector<int> numeration (string img_path)
 
 void gommageGR (string img_path) // cette fonction appelle juste le script octave
 {
-	system(("./gommage.m " + img_path).c_str());
+    cout << "Features highlight called on" << img_path << "\n";
+    system(
+            ("/home/anael/eclipse-workspace/ImageProject2/Octave\\ Files/gommage.m "
+                    + img_path).c_str());
 }

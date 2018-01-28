@@ -43,11 +43,11 @@ void ScrolledList::addScrolledIconsList(ScrolledIconsList* list) {
  *
  * @return pointer vecor to all selected bitmaps within sublists
  */
-std::vector<ImageWindow*>& ScrolledList::getSelectedImageWindows() {
+std::vector<ImageWindow*> const& ScrolledList::getSelectedImageWindows() const {
     return selectedImageWindows;
 }
 
-int ScrolledList::getSelectedImagesCount() {
+int ScrolledList::getSelectedImagesCount() const {
     return selectedImageWindows.size();
 }
 

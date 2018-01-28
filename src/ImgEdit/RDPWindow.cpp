@@ -118,7 +118,32 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
                 return 0;
             }));
 
+    key = requestKey(); //Request new available keyboard key
+    aH.push_back(ActionsHolder(key, "Enhance blood features", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                featuresEnhancement();
+                return 0;
+            }));
 
+    key = requestKey(); //Request new available keyboard key
+    aH.push_back(ActionsHolder(key, "Display cells counts", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                std::vector<std::vector<int>> counts = countBC();
+
+                for (int i = 0; i<counts.size(); ++i) {
+                    std::cout<< i << "th image features : " << '\n';
+                            std::cout<< "White blood cells count" << counts.at(i).at(0)<<'\n';
+                            std::cout<< "Red blood cells count" << counts.at(i).at(1)<<'\n';
+                            std::cout<< "THR blood cells count" << counts.at(i).at(2)<<'\n';
+                }
+                return 0;
+            }));
 
     //###################### ADD NEW ACTIONS UP HERE ######################
 
@@ -154,5 +179,18 @@ void RDPWindow::backHome() {
     }
 }
 
-void RDPWindow::processImage() {
+std::vector<std::vector<int>> RDPWindow::countBC() {
+    std::vector<std::vector<int>> counts;
+    for (ImageWindow* im : iL->getSelectedImageWindows()) {
+        counts.push_back(numeration(im->getImPath()));
+    }
+    return counts;
+}
+
+void RDPWindow::featuresEnhancement() {
+    for (ImageWindow* im : iL->getSelectedImageWindows()) {
+        gommageGR(im->getImPath());
+    }
+
+    std::cout << "Processed images have been saved" << '\n';
 }

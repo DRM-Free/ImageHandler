@@ -29,8 +29,8 @@ private:
 public:
     void addScrolledIconsList(ScrolledIconsList*);
 //    void updateSelectedImageWindows();
-    std::vector<ImageWindow*>& getSelectedImageWindows();
-    int getSelectedImagesCount();
+    std::vector<ImageWindow*> const& getSelectedImageWindows() const;
+    int getSelectedImagesCount() const;
     void clearSelected();
 
 private:

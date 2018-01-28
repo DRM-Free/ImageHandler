@@ -31,7 +31,6 @@ private:
 //-------------------Methods
 public:
     void appendImageWindows(ImageWindow const& window);
-    std::vector<ImageWindow*>& getSelectedImageWindows();
     void addImageWindowsToSelected(ImageWindow* iW);
     void removeImageWindowsFromSelected(ImageWindow* iW);
 
