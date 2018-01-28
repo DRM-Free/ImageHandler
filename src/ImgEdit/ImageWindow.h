@@ -18,25 +18,21 @@
 class ImageWindow: public wxScrolledWindow, public Observed {
 
 private:
-    wxBitmap* bitmap;
-    int w, h;
-    int minWidth = 600;
-    int minwHeight = 600;
-    bool isSelected;
-    bool isSelectible;
+    wxBitmap bitmap;
+    std::string imPath; //Path to the original image, for processing purpose
+    bool selected;
+    bool selectible;
 
 public:
-    ImageWindow(wxWindow* parent, wxSize const & minSize);
+    ImageWindow(wxWindow* parent, std::string path = "");
     ~ImageWindow();
     void OnDraw(wxDC& dc) override;
-    void keyPressed(wxKeyEvent& event);
-    wxSize setBitMap();
-    wxSize setBitMap(wxString);
-    wxSize copyBitMap(wxBitmap*);
-    wxSize getSize();
-    wxBitmap* getBitmap();
-    void switchSelected(wxMouseEvent& event);
+    void switchSelected();
     void forbidSelection();
-//    void OnSize(wxSizeEvent& event);
+    void iconize(wxSize size = wxSize(280, 280));
+    void setBitmap(std::string path);
+    bool hasImage() const;
+    std::string getImPath() const;
+    bool isSelected() const;
 };
 #endif

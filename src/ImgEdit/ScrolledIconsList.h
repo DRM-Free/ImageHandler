@@ -15,29 +15,28 @@
 #include "../tools/Observer.hpp"
 #include <map>
 
-class ScrolledIconsList: public wxScrolledWindow, Observer {
+class ScrolledIconsList: public wxScrolledWindow {
 //-------------------Attributes
 private:
     //Map for quick data retrieval by iW*
-    std::map<ImageWindow*, std::tuple<wxBitmap*, wxBitmap*>> iWBRB; //Image Window Bitmap Reduced Bitmap
-    std::vector<wxBitmap*>* selectedBitmaps;
+    //SEE iWBEB to be removed
+    std::vector<ImageWindow*> imageWindows;
     wxBoxSizer *sizer;
 //-------------------Constructors
 public:
     ScrolledIconsList(wxWindow* parent);
-    void appendBitmap(wxBitmap *BitMap);
-    std::vector<wxBitmap*>* getSelectedBitmaps();
-    void addBitmapToSelected(wxBitmap*);
-    void removeBitmapFromSelected(wxBitmap*);
-    int numberSelected();
     ~ScrolledIconsList();
 
 private:
 //-------------------Methods
 public:
+    void appendImageWindows(ImageWindow const& window);
+    std::vector<ImageWindow*>& getSelectedImageWindows();
+    void addImageWindowsToSelected(ImageWindow* iW);
+    void removeImageWindowsFromSelected(ImageWindow* iW);
 
 private:
-
+    void setScrolls();
 //-------------------Getters&Setters
 public:
 

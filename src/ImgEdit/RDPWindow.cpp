@@ -6,29 +6,41 @@
  */
 
 #include "RDPWindow.h"
+#include "../process/image_processing.h"
+#include <exception>
 
 RDPWindow::RDPWindow(wxWindow* parent) :
         CustomWindow(parent, WindowType::RDP, "Raw data processing"), shouldNotclose {
-                false }, selectedImages { 0 } {
-    aH = new std::vector<ActionsHolder>;
-    setPreferredKeys();
-    escapeKey = WXK_ESCAPE;
-    wT = WindowType::RDP;
-    SelectedImageWindows = nullptr;
-    mainSizer = new wxBoxSizer(wxHORIZONTAL);
+                false } {
+    //Initialisations
     controlSizer = new wxBoxSizer(wxVERTICAL);
-    iW = new ImageWindow(this, wxSize(600, 600));
-    iW->forbidSelection();
+    iW = new ImageWindow(this);
     iL = new ScrolledList(this);
-    aL = new ActionsList(this);
-    aL->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
-    iW->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
-    iW->SetFocus();
+    wT = WindowType::RDP;
+
+    //Initialisations
+
+    //Mise en page
+
     mainSizer->Add(controlSizer);
     mainSizer->Add(iW, 3, wxEXPAND);
-    controlSizer->Add(aL);
+    controlSizer->Add(getAl());
     controlSizer->Add(iL, 1, wxEXPAND);
     SetSizerAndFit(mainSizer);
+
+//    mainSizer->Add(controlSizer);
+//    mainSizer->Add(iW, 3, wxEXPAND);
+//    SetSizerAndFit(mainSizer);
+    //Mise en page
+
+//    controlSizer->Add(getAl());
+    iW->forbidSelection();
+    escapeKey = WXK_ESCAPE;
+    setPreferredKeys();
+
+    getAl()->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
+    iW->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
+    iW->SetFocus();
 }
 
 void RDPWindow::displayContextualHelp() {
@@ -37,25 +49,32 @@ void RDPWindow::displayContextualHelp() {
 
 void RDPWindow::keyPressed(wxKeyEvent& event) {
     CustomWindow::keyPressed(event);
-    iL->updateSelectedBitmaps();
 }
 
-void RDPWindow::pickImage() {
+void RDPWindow::pickImage() { //Crashes in pickimage
     shouldNotclose = true;
-    iW->setBitMap();
-    ScrolledIconsList *sIL = new ScrolledIconsList(iL);
-    iL->addScrolledIconsList(sIL);
-    sIL->appendBitmap(iW->getBitmap());
+    try {
+        iW->setBitmap(askJPG());
+        ScrolledIconsList* sIL = new ScrolledIconsList(iL);
+        iL->addScrolledIconsList(sIL);
+        sIL->appendImageWindows(*iW);
+        // TEST Appends twice to test scrollbar
+        sIL->appendImageWindows(*iW);
+        Refresh();
+    } catch (std::runtime_error const& e) {
+        std::cout << e.what();
+    }
     shouldNotclose = false;
 }
 
-void RDPWindow::resumeImage(wxBitmap* bitmap) {
-    iW->copyBitMap(bitmap);
-}
+std::string RDPWindow::askJPG() {
+    wxFileDialog openFileDialog(this, _("Pick an image"), "", "",
+            "jpg files (*.jpg)|*.jpg", wxFD_OPEN);
+    if (openFileDialog.ShowModal() == wxID_CANCEL) {
+        throw std::runtime_error("User cancelled image selection");
+    }
 
-void RDPWindow::checkSelected() {
-    //TODO fill checkSelected !
-    selectedImages = iL->numberSelected();
+    return openFileDialog.GetPath().ToStdString();
 }
 
 /**
@@ -65,28 +84,32 @@ void RDPWindow::checkSelected() {
 std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
     std::vector<std::pair<std::string, std::string>> actionsL;
 
-    aH->push_back(ActionsHolder(escapeKey, "Back to Home", [this]()->bool //
-    {
-        return true;
-    }, [this]()
-    {
-                backHome();
-        /* SEE : Returning any doesn't allow void !! */
-        return 0;
-            }));
+    //###################### ADD NEW ACTIONS DOWN HERE ######################
 
-    char key = requestKey(); //Request new available keyboard key
-    aH->push_back(ActionsHolder(key, "Pick image", [this]()->bool //
-                            {
-                                return true;
-                            }, [this]()
-                            {
-                                this->pickImage();
-                                /* SEE : Returning any doesn't allow void !! */
+    aH.push_back(ActionsHolder(escapeKey, "Back to Home", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                backHome();
+                /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
 
-    for (auto it = aH->begin(); it != aH->end(); ++it) {
+    char key = requestKey(); //Request new available keyboard key
+    aH.push_back(ActionsHolder(key, "Pick image", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                this->pickImage();
+                /* SEE : Returning any doesn't allow void !! */
+                return 0;
+            }));
+
+    //###################### ADD NEW ACTIONS UP HERE ######################
+
+    for (auto it = aH.begin(); it != aH.end(); ++it) {
         actionsL.push_back((*it).generateActionLabels());
     }
     //SEE the above loop must do the same as comments below :
@@ -101,11 +124,9 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
  *Checks what of the added actions are now active and make changes in ActionsHolders and registeredActions map
  */
 
-
 void RDPWindow::clearSelected() {
 
 }
-
 
 bool RDPWindow::isAllowedToClose() {
     return !shouldNotclose;
@@ -120,7 +141,7 @@ void RDPWindow::backHome() {
         } catch (std::exception& e) {
             std::cerr << e.what() << '\n';
         }
-        Hide();
+        Close();
     }
 }
 

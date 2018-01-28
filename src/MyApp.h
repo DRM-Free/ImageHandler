@@ -17,15 +17,20 @@ private:
     HomeWindow *mainWindow;
     FramesManager* frameManager;
 public:
-    virtual bool OnInit() {
-    wxInitAllImageHandlers();
+    virtual bool OnInit() override {
+        wxInitAllImageHandlers();
         mainWindow = new HomeWindow();
         mainWindow->setActionsList();
         frameManager = new FramesManager(mainWindow);
         mainWindow->addObserver(frameManager);
         SetTopWindow(mainWindow);
         mainWindow->Show();
-    return true;
+        return true;
+    }
+
+    virtual int OnExit() override {
+        delete frameManager;
+        return true;
     }
 };
 

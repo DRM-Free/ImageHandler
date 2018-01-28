@@ -16,7 +16,8 @@ class ReportWindow: public CustomWindow {
 //-------------------Attributes
 private:
     ReportForm* rF;
-    wxBoxSizer *controlSizer;
+    wxBoxSizer* controlSizer;
+    bool shouldNotclose;
 
 //-------------------Constructors
 public:
@@ -29,8 +30,7 @@ public:
     std::vector<std::pair<std::string, std::string>> setActionsHolder()
             override;
 
-private:
-    bool shouldNotclose;
+
 
 //-------------------Methods
 public:

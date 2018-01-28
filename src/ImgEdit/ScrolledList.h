@@ -12,27 +12,29 @@
 #include "ScrolledIconsList.h"
 #include <vector>
 
-class ScrolledList: public wxScrolledWindow {
+class ScrolledList: public wxScrolledWindow, public Observer {
 //-------------------Attributes
 private:
     wxBoxSizer *sizer;
-    std::vector<ScrolledIconsList*> *scrolledIconsLists;
-    std::vector<wxBitmap*>* selectedBitmaps;
+    std::vector<ScrolledIconsList*> scrolledIconsLists;
+    std::vector<ImageWindow*> selectedImageWindows;
 //-------------------Constructors
 public:
     ScrolledList(wxWindow* parent);
-    void addScrolledIconsList(ScrolledIconsList*);
-    void updateSelectedBitmaps();
-    std::vector<wxBitmap*>* getSelectedBitmaps();
-    int numberSelected();
     virtual ~ScrolledList();
 
 private:
 
 //-------------------Methods
 public:
+    void addScrolledIconsList(ScrolledIconsList*);
+//    void updateSelectedImageWindows();
+    std::vector<ImageWindow*>& getSelectedImageWindows();
+    int getSelectedImagesCount();
+    void clearSelected();
 
 private:
+    void setScrolls();
 
 //-------------------Getters&Setters
 public:

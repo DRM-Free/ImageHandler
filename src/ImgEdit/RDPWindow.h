@@ -24,10 +24,10 @@ class RDPWindow: public CustomWindow {
 
 public:
     RDPWindow(wxWindow* parent);
+    std::string askJPG();
     void displayContextualHelp() override;
     void keyPressed(wxKeyEvent& event);
     void pickImage();
-    void resumeImage(wxBitmap* bitmap);
     void backHome();
     void clearSelected();
     bool isAllowedToClose();
@@ -44,11 +44,10 @@ public:
     //TODO: add one "Make Tuple" method that puts selected images in a common set for quicker transformations involving this set of images
 private:
     bool shouldNotclose;
-    int selectedImages;
-    ImageWindow *iW;
-    ScrolledList *iL;
-    wxBoxSizer *controlSizer;
-    std::vector<ImageWindow*> *SelectedImageWindows;
+    wxBoxSizer* controlSizer;
+    ImageWindow* iW;
+    ScrolledList* iL;
+    std::vector<ImageWindow*> SelectedImageWindows;
 };
 
 

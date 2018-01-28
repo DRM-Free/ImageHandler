@@ -17,8 +17,7 @@ HomeWindow::HomeWindow() :
     //SEE One can't call pure virtual method in child constructor !
     //setActionsList can't be called right now, as it calls pure virtual method setActionsHolder before creation of the object
 //    setActionsList();
-    aL->Bind(wxEVT_CHAR, &HomeWindow::keyPressed, this);
-
+    getAl()->Bind(wxEVT_CHAR, &HomeWindow::keyPressed, this);
 }
 
 /**
@@ -30,7 +29,7 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
     std::vector<std::pair<std::string, std::string>> actionsL;
 
 //    actionsL.push_back(std::make_pair("h", "Display contextual help"));
-    aH->push_back(
+    aH.push_back(
             ActionsHolder(escapeKey, "Quit application", [this]()->bool //
                     {
                         return true;
@@ -42,7 +41,7 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                     }));
 
     char key = requestKey(); //Request new available keyboard key
-    aH->push_back(ActionsHolder(key, "New report", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "New report", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -61,7 +60,7 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
             }));
 
     key = requestKey(); //Request new available keyboard key
-    aH->push_back(ActionsHolder(key, "Display contextual help", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Display contextual help", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -71,7 +70,7 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
             }));
 
     key = requestKey(); //Request new available keyboard key
-    aH->push_back(ActionsHolder(key, "Process raw data", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Process raw data", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -89,7 +88,7 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                 return 0;
             }));
 
-    for (auto it = aH->begin(); it != aH->end(); ++it) {
+    for (auto it = aH.begin(); it != aH.end(); ++it) {
         actionsL.push_back((*it).generateActionLabels());
     }
 

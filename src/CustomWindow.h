@@ -33,21 +33,23 @@ public:
     void updateActionsList(); //This calls updateActionsHolder by itself
     void doAction(char c);
     void setPreferredKeys();
-    ~CustomWindow();
+    virtual ~CustomWindow();
 private:
-protected:
-    wxWindow* actionWindow;
-    wxListCtrl actionsCtrl;
+//    wxWindow* actionWindow;
     ActionsList* aL;
-    wxBoxSizer *mainSizer; //For welcome window only
+protected:
+    wxBoxSizer* mainSizer;
+    ActionsList* getAl();
+
+    //SEE no attribute should be protected nor public
+//    wxListCtrl* actionsCtrl;
     WindowType wT;
     std::vector<std::pair<char, bool>> preferredKeys; //bool true if key is available
-    std::vector<ActionsHolder>* aH;
+    std::vector<ActionsHolder> aH;
     char escapeKey;
 
     //Getters and setters
 public:
-    ActionsList* getAL();
 };
 
 #endif /* CUSTOMWINDOW_H_ */

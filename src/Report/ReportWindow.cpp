@@ -8,18 +8,15 @@
 #include "ReportWindow.h"
 
 ReportWindow::ReportWindow(wxWindow* parent) :
-        CustomWindow(parent, WindowType::RM, "Raw data processing"), shouldNotclose {
+        CustomWindow(parent, WindowType::RM, "Raw data processing"), rF(
+                new ReportForm(this)), controlSizer(
+                new wxBoxSizer(wxVERTICAL)), shouldNotclose {
                 false } {
     setPreferredKeys();
-    rF = new ReportForm(this);
     rF->setForm();
     wT = WindowType::RM;
-    mainSizer = new wxBoxSizer(wxHORIZONTAL);
-    controlSizer = new wxBoxSizer(wxVERTICAL);
-    aL = new ActionsList(this);
-    aL->Bind(wxEVT_CHAR, &ReportWindow::keyPressed, this);
-    aL->SetFocus();
-    controlSizer->Add(aL);
+    getAl()->Bind(wxEVT_CHAR, &ReportWindow::keyPressed, this);
+    controlSizer->Add(getAl());
     mainSizer->Add(controlSizer);
     mainSizer->Add(rF);
     SetSizerAndFit(mainSizer);
@@ -53,7 +50,7 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
     std::vector<std::pair<std::string, std::string>> actionsL;
 
 
-    aH->push_back(
+    aH.push_back(
             ActionsHolder(escapeKey, "Back Home", [this]()->bool //
                     {
                         return true;
@@ -66,7 +63,7 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 
     char key = requestKey(); //Request new available keyboard key
 
-    aH->push_back(ActionsHolder(key, "Submit report", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Submit report", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -77,7 +74,7 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 
     key = requestKey(); //Request new available keyboard key
 
-    aH->push_back(ActionsHolder(key, "Display contextual help", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Display contextual help", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -90,7 +87,7 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 
     key = requestKey(); //Request new available keyboard key
 
-    aH->push_back(ActionsHolder(key, "Discard report", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Discard report", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -98,7 +95,7 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 //TODO call discard report
             return 0;
         }));
-    for (auto it = aH->begin(); it != aH->end(); ++it) {
+    for (auto it = aH.begin(); it != aH.end(); ++it) {
         actionsL.push_back((*it).generateActionLabels());
     }
 

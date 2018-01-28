@@ -6,60 +6,64 @@
  */
 
 #include "ScrolledList.h"
+#include <algorithm>
 #include <iostream>
 
 ScrolledList::ScrolledList(wxWindow* parent) :
         wxScrolledWindow(parent, wxID_ANY) {
-    selectedBitmaps = new std::vector<wxBitmap*>;
     AlwaysShowScrollbars(false, true);
     sizer = new wxBoxSizer(wxVERTICAL);
-    scrolledIconsLists = new std::vector<ScrolledIconsList*>;
     SetMinClientSize(wxSize(300, 500));
     SetSizer(sizer);
-    int* x = new int;
-    int* y = new int;
-    GetSize(x, y);
-    SetScrollbars(0, 1, 0, *y + 5, 0, 0);
+    setScrolls();
+
+    addAction<std::string, ImageWindow*>("select",
+            [this](ImageWindow* content, Observed const& observed) -> void
+            {
+                if (content->isSelected()) {
+                    selectedImageWindows.push_back(content);
+                } else {
+                    selectedImageWindows.erase(std::find(selectedImageWindows.begin(), selectedImageWindows.end(), content));
+                }
+            });
 }
 
+/**
+ * Adds a new list of images to be displayed in a raw.
+ * @param list
+ */
 void ScrolledList::addScrolledIconsList(ScrolledIconsList* list) {
-    scrolledIconsLists->push_back(list);
-    sizer->Add(list, 1, wxEXPAND);
-    int* x = new int;
-    int* y = new int;
-    GetSize(x, y);
-    std::cout << "scrollHeight set to " << *y + 5 << std::endl;
-    SetScrollbars(0, 1, 0, *y + 5, 0, 0);
-    Refresh();
+    scrolledIconsLists.push_back(list);
+    sizer->Add(list, 1, wxALIGN_TOP);
+    FitInside(); //Forces scrollbar to scroll properly whole range.
+    setScrolls();
 }
 
 /**
  *
  * @return pointer vecor to all selected bitmaps within sublists
  */
-std::vector<wxBitmap*>* ScrolledList::getSelectedBitmaps() {
-    return selectedBitmaps;
+std::vector<ImageWindow*>& ScrolledList::getSelectedImageWindows() {
+    return selectedImageWindows;
 }
 
-void ScrolledList::updateSelectedBitmaps() {
-    auto it = scrolledIconsLists->begin();
-    if (it != scrolledIconsLists->end()) {
-        *selectedBitmaps = *(*it)->getSelectedBitmaps();
-        std::vector<wxBitmap*> toMerge = *(*it)->getSelectedBitmaps();
-    while (it != scrolledIconsLists->end()) {
-        ++it;
-        selectedBitmaps->reserve(selectedBitmaps->size() + toMerge.size()); // preallocate memory
-        selectedBitmaps->insert(selectedBitmaps->end(), toMerge.begin(),
-                toMerge.end());
-    }
-    }
+int ScrolledList::getSelectedImagesCount() {
+    return selectedImageWindows.size();
 }
 
-int ScrolledList::numberSelected() {
-    updateSelectedBitmaps();
-    return selectedBitmaps->size();
+void ScrolledList::setScrolls() {
+    int x = 0;
+    int y = 0;
+    GetVirtualSize(&x, &y);
+    SetScrollbars(0, 1, 0, y + 5, 0, 0);
 }
 
 ScrolledList::~ScrolledList() {
 }
 
+void ScrolledList::clearSelected() {
+    while (!selectedImageWindows.empty()) {
+        selectedImageWindows.back()->switchSelected();
+        selectedImageWindows.pop_back();
+    }
+}

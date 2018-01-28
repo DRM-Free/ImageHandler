@@ -5,25 +5,33 @@
  *      Author: anael
  */
 
-
 #include "CustomWindow.h"
 
 CustomWindow::CustomWindow(wxWindow* parent, WindowType winType,
         char const * name) :
-        wxFrame(parent, -1, name,
-                wxDefaultPosition, wxDefaultSize,
+        wxFrame(parent, -1, name, wxDefaultPosition, wxDefaultSize,
         wxSTAY_ON_TOP) {
-    aH = new std::vector<ActionsHolder>;
+    //Initialisations
+//    actionWindow = new wxWindow(this, wxID_ANY);
+    aL = new ActionsList(this);
     escapeKey = WXK_ESCAPE;
     wT = winType;
-    actionWindow = new wxWindow(this, wxID_ANY);
-    aL = new ActionsList(actionWindow);
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
-    mainSizer->Add(actionWindow);
-    SetSizerAndFit(mainSizer);
-    aL->SetFocus(); //Gives focus to aL, so user doesn't have to first click home window
+    //Initialisations
+
+    //Mise en page
+
+//    mainSizer->Add(actionWindow);
+//    SetSizerAndFit(mainSizer);
     Centre();
+    //Mise en page
+
+    aL->SetFocus(); //Gives focus to aL, so user doesn't have to first click home window
     setPreferredKeys();
+}
+
+CustomWindow::~CustomWindow() {
+
 }
 
 void CustomWindow::setPreferredKeys() {
@@ -38,17 +46,13 @@ void CustomWindow::setPreferredKeys() {
     addPreferredKey('h');
 }
 
-ActionsList* CustomWindow::getAL() {
-    return aL;
-}
-
 void CustomWindow::keyPressed(wxKeyEvent& event) {
     wxChar pressedKey = event.GetUnicodeKey();
     if (pressedKey != WXK_NONE) {
         doAction(pressedKey);
-        }
-
     }
+
+}
 
 void CustomWindow::addPreferredKey(char c) {
     preferredKeys.push_back(std::pair<char, bool>(c, true));
@@ -56,7 +60,7 @@ void CustomWindow::addPreferredKey(char c) {
 
 std::vector<std::pair<std::string, std::string>> CustomWindow::updateActionsHolder() {
     std::vector<std::pair<std::string, std::string>> actionsL;
-    for (auto it = aH->begin(); it != aH->end(); ++it) {
+    for (auto it = aH.begin(); it != aH.end(); ++it) {
         if ((*it).checkActive() && (*it).getKey() == '\0') {
             char key = requestKey();
             (*it).setKey(key);
@@ -101,15 +105,14 @@ void CustomWindow::freeKey(char c) {
     }
 }
 
-    void CustomWindow::doAction(char c) {
-    for (auto it = aH->begin(); it != aH->end(); ++it) {
-            if ((*it).getKey() == c) {
-                (*it).doBehaviour();
-            }
+void CustomWindow::doAction(char c) {
+    for (auto it = aH.begin(); it != aH.end(); ++it) {
+        if ((*it).getKey() == c) {
+            (*it).doBehaviour();
         }
     }
-
-CustomWindow::~CustomWindow() {
-
 }
 
+ActionsList* CustomWindow::getAl() {
+    return aL;
+}
