@@ -33,7 +33,7 @@ public:
     void keyPressed(wxKeyEvent& event);
     void pickImage();
     void addImage(std::string imPath);
-    void addImage(std::vector<std::string> imPath);
+    void addImage(std::vector<std::string> const& imPath);
     void backHome();
     void makeTuple();
     bool isAllowedToClose();

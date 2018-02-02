@@ -54,18 +54,38 @@ void RDPWindow::keyPressed(wxKeyEvent& event) {
 void RDPWindow::pickImage() { //Crashes in pickimage
     shouldNotclose = true;
     try {
-        iW->setBitmap(askJPG());
-        ScrolledIconsList* sIL = new ScrolledIconsList(iL);
-        iL->addScrolledIconsList(sIL);
-        sIL->appendImageWindows(*iW);
-        // TEST Appends twice to test scrollbar
-        sIL->appendImageWindows(*iW);
-        Refresh();
+        addImage(askJPG());
+//        ScrolledIconsList* sIL = new ScrolledIconsList(iL);
+//        iL->addScrolledIconsList(sIL);
+//        sIL->appendImageWindows(*iW);
+//        Refresh();
     } catch (std::runtime_error const& e) {
         std::cout << e.what();
     }
     shouldNotclose = false;
 }
+
+void RDPWindow::addImage(std::string imPath) {
+    iW->setBitmap(imPath);
+    ScrolledIconsList* sIL = new ScrolledIconsList(iL);
+    sIL->appendImageWindows(imPath);
+
+    iL->addScrolledIconsList(sIL);
+    Refresh();
+}
+
+void RDPWindow::addImage(std::vector<std::string> const& imPaths) {
+    ScrolledIconsList* sIL = new ScrolledIconsList(iL);
+    for (uint32_t i = 0; i < imPaths.size(); ++i) {
+//        imWin = new ImageWindow(sIL);
+//        imWin->setBitmap(imPaths.at(i));
+        sIL->appendImageWindows(imPaths.at(i));
+    }
+    iL->addScrolledIconsList(sIL);
+    iW->setBitmap(imPaths.at(imPaths.size() - 1));
+    Refresh();
+}
+
 
 std::string RDPWindow::askJPG() {
     wxFileDialog openFileDialog(this, _("Pick an image"), "", "",
@@ -149,7 +169,7 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
     aH.push_back(ActionsHolder(key, "Make tuple", [this]()->bool //
             {
                 return true;
-            }, [this]()
+            }, [this]
             {
                 makeTuple();
                 return 0;
@@ -194,29 +214,6 @@ std::vector<std::vector<int>> RDPWindow::countBC() {
         counts.push_back(numeration(im->getImPath()));
     }
     return counts;
-}
-
-void RDPWindow::addImage(std::string imPath) {
-    iW->setBitmap(imPath);
-    ScrolledIconsList* sIL = new ScrolledIconsList(iL);
-    iL->addScrolledIconsList(sIL);
-    sIL->appendImageWindows(*iW);
-    // TEST Appends twice to test scrollbar
-//    sIL->appendImageWindows(*iW);
-    Refresh();
-}
-
-void RDPWindow::addImage(std::vector<std::string> imPaths) {
-    ScrolledIconsList* sIL = new ScrolledIconsList(iL);
-    ImageWindow* imWin = nullptr;
-    for (uint i = 0; i < imPaths.size(); ++i) {
-            imWin = new ImageWindow(sIL);
-        imWin->setBitmap(imPaths.at(i));
-        sIL->appendImageWindows(*imWin);
-    }
-    iL->addScrolledIconsList(sIL);
-    iW->setBitmap(imPaths.at(imPaths.size() - 1));
-    Refresh();
 }
 
 void RDPWindow::makeTuple() {

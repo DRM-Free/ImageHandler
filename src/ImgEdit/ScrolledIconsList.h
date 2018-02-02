@@ -30,7 +30,7 @@ public:
 private:
 //-------------------Methods
 public:
-    void appendImageWindows(ImageWindow const& window);
+    void appendImageWindows(std::string const& window);
     void addImageWindowsToSelected(ImageWindow* iW);
     void removeImageWindowsFromSelected(ImageWindow* iW);
 

@@ -20,8 +20,12 @@ ScrolledIconsList::ScrolledIconsList(wxWindow* parent) :
 
 }
 
-void ScrolledIconsList::appendImageWindows(ImageWindow const& window) {
-    ImageWindow* reducedWindow = new ImageWindow(this, window.getImPath());
+/**
+ *
+ * @param window
+ */
+void ScrolledIconsList::appendImageWindows(std::string const& imPath) {
+    ImageWindow* reducedWindow = new ImageWindow(this, imPath);
     reducedWindow->iconize();
     imageWindows.push_back(reducedWindow);
 //    reducedWindow->SetMinClientSize(wxSize(280, 280));
