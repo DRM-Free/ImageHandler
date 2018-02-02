@@ -145,6 +145,15 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
                 return 0;
             }));
 
+    key = requestKey(); //Request new available keyboard key
+    aH.push_back(ActionsHolder(key, "Make tuple", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                makeTuple();
+                return 0;
+            }));
     //###################### ADD NEW ACTIONS UP HERE ######################
 
     for (auto it = aH.begin(); it != aH.end(); ++it) {
@@ -187,10 +196,57 @@ std::vector<std::vector<int>> RDPWindow::countBC() {
     return counts;
 }
 
-void RDPWindow::featuresEnhancement() {
-    for (ImageWindow* im : iL->getSelectedImageWindows()) {
-        gommageGR(im->getImPath());
-    }
+void RDPWindow::addImage(std::string imPath) {
+    iW->setBitmap(imPath);
+    ScrolledIconsList* sIL = new ScrolledIconsList(iL);
+    iL->addScrolledIconsList(sIL);
+    sIL->appendImageWindows(*iW);
+    // TEST Appends twice to test scrollbar
+//    sIL->appendImageWindows(*iW);
+    Refresh();
+}
 
+void RDPWindow::addImage(std::vector<std::string> imPaths) {
+    ScrolledIconsList* sIL = new ScrolledIconsList(iL);
+    ImageWindow* imWin = nullptr;
+    for (uint i = 0; i < imPaths.size(); ++i) {
+            imWin = new ImageWindow(sIL);
+        imWin->setBitmap(imPaths.at(i));
+        sIL->appendImageWindows(*imWin);
+    }
+    iL->addScrolledIconsList(sIL);
+    iW->setBitmap(imPaths.at(imPaths.size() - 1));
+    Refresh();
+}
+
+void RDPWindow::makeTuple() {
+    std::vector<std::string> imPaths;
+    for (ImageWindow* im : iL->getSelectedImageWindows()) {
+        imPaths.push_back(im->getImPath());
+    }
+    addImage(imPaths);
+    iL->clearSelected();
+}
+
+void RDPWindow::featuresEnhancement() {
+
+    std::string outName = "";
+    fs::path outFolder = "";
+    fs::path imPath = "";
+    fs::path outputPath =
+            "/home/anael/eclipse-workspace/ImageProject2/Images/ProcessedData";
+    std::vector<std::string> imPaths;
+    for (ImageWindow* im : iL->getSelectedImageWindows()) {
+        imPath = im->getImPath();
+        outName = imPath.stem().concat("_enhanced").concat(
+                imPath.extension().string());
+        outFolder = outputPath.parent_path();
+        outFolder.append("ProcessedData");
+        outFolder.append(outName);
+        gommageGR(imPath, outFolder);
+        imPaths.push_back(outFolder.string());
+    }
     std::cout << "Processed images have been saved" << '\n';
+    addImage(imPaths);
+    iL->clearSelected();
 }

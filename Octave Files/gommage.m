@@ -22,6 +22,10 @@ warning('off', 'Octave:GraphicsMagic-Quantum-Depth'); %supprime un commentaire d
 %------------------------------------------------------------------------%
 img_path = argv(){1}; % récupère l'argument du shell, le path de l'image
 
+%Code ajouté pour déplacer la sauvegarde des images%
+save_path = argv(){2};
+%Code ajouté pour déplacer la sauvegarde des images%
+
 img_origin = imread(img_path); % lecture de l'image
 if(numel (img_origin) == 1) % si l'image n'a qu'un pixel, ce n'est pas une image valide
   display ('invalid image argument');
@@ -64,7 +68,7 @@ if (zoom == 400)  % lancement de l'algo pour le zoom 400
 	end
 	img_gom = GB_thrombo;
   img_gom_path = strcat (img_path(1:end-4),'_gomGR.PNG'); % on supprime l'extension de l'image original et on renomme pour qu'elles soient dans le répertoire
-  imwrite (img_gom,img_gom_path) % on l'enregistre
+  imwrite (img_gom,save_path) % on l'enregistre
 
 %---------------------------------------------------------------------------%
 %-------------------------------- zoom 4000 --------------------------------%
@@ -95,6 +99,6 @@ elseif (zoom == 4000) % même chose que précédemment, avec le zoom 4000. certa
 	end
   img_gom = GB_thrombo;
   img_gom_path = strcat (img_path(1:end-4),'_gomGR.PNG'); 
-  imwrite (img_gom,img_gom_path)
+  imwrite (img_gom,save_path)
 
 end

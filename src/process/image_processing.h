@@ -1,5 +1,5 @@
 // Copyright Pierre-Jean LARTAUD
-// 5A GBM Polytech Lyon / M2 MISS Lyon1 
+// 5A GBM Polytech Lyon / M2 MISS Lyon1
 // 2017/2018
 
 //--------------------------------------------------------------------------//
@@ -17,10 +17,12 @@
 #include <sstream>
 #include <vector>
 #include <stdio.h>
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 using namespace std;
 
 vector<int> numeration (string img_path);
-void gommageGR (string img_path);
-
+void gommageGR(fs::path img_path, fs::path outputPath);
 
 #endif

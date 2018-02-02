@@ -20,6 +20,9 @@
 #include <functional>
 #include <string>
 #include "../process/image_processing.h"
+#include <experimental/filesystem>
+#include <future>
+#include <thread>
 
 class RDPWindow: public CustomWindow {
 
@@ -29,7 +32,10 @@ public:
     void displayContextualHelp() override;
     void keyPressed(wxKeyEvent& event);
     void pickImage();
+    void addImage(std::string imPath);
+    void addImage(std::vector<std::string> imPath);
     void backHome();
+    void makeTuple();
     bool isAllowedToClose();
     void checkSelected(); //Processes and updates the number of selected images
     std::vector<std::pair<std::string, std::string>> setActionsHolder()

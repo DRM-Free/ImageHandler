@@ -82,10 +82,16 @@ vector<int> numeration (string img_path)
 //--------------------------------- gommage --------------------------------//
 //--------------------------------------------------------------------------//
 
-void gommageGR (string img_path) // cette fonction appelle juste le script octave
+/**
+ *
+ * @param img_path Original image path
+ * @param outputPath Path to folder or file to be written
+ */
+void gommageGR(fs::path img_path, fs::path outputPath) // cette fonction appelle juste le script octave
 {
     cout << "Features highlight called on" << img_path << "\n";
+
     system(
             ("/home/anael/eclipse-workspace/ImageProject2/Octave\\ Files/gommage.m "
-                    + img_path).c_str());
+                    + img_path.string() + " " + outputPath.string()).c_str());
 }
