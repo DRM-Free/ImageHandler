@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-class ActionsList: public wxListCtrl {
+class ActionsList {
 public:
     ActionsList(wxWindow* parent);
     ~ActionsList();
@@ -22,7 +22,9 @@ public:
     void resetList(std::vector<std::pair<std::string, std::string>> actions);
     void addAction(wxString key, wxString description);
     void setImageTransforms(int numberSelected);
+    wxListCtrl *getShownList();
 private:
+    wxListCtrl shownList;
     wxListItem col0;
     wxListItem col1;
 };

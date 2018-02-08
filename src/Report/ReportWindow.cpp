@@ -7,8 +7,8 @@
 
 #include "ReportWindow.h"
 
-ReportWindow::ReportWindow(wxWindow* parent) :
-        CustomWindow(parent, WindowType::RM, "Raw data processing"), rF(
+ReportWindow::ReportWindow() :
+        CustomWindow(WindowType::RM, "Raw data processing"), rF(
                 new ReportForm(this)), controlSizer(
                 new wxBoxSizer(wxVERTICAL)), shouldNotclose {
                 false } {
@@ -16,8 +16,8 @@ ReportWindow::ReportWindow(wxWindow* parent) :
     setPreferredKeys("jklmopuinbghty");
     rF->setForm();
     wT = WindowType::RM;
-    getAl()->Bind(wxEVT_CHAR, &ReportWindow::keyPressed, this);
-    controlSizer->Add(getAl());
+    getAl()->getShownList()->Bind(wxEVT_CHAR, &ReportWindow::keyPressed, this);
+    controlSizer->Add(getAl()->getShownList());
     mainSizer->Add(controlSizer);
     mainSizer->Add(rF);
     SetSizerAndFit(mainSizer);
@@ -92,8 +92,8 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
                 return true;
             }, [this]()
             {
-//TODO call discard report
-            return 0;
+
+                return 0;
         }));
     for (auto it = aH.begin(); it != aH.end(); ++it) {
         actionsL.push_back((*it).generateActionLabels());

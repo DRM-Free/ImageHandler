@@ -10,15 +10,29 @@
 #include "../src/General/WindowType.h"
 
 PatientFileWindow::PatientFileWindow() :
-        CustomWindow(nullptr, WindowType::PATIENT_MANAGER, "Patient manager"), s1(
+        CustomWindow(WindowType::PATIENT_MANAGER, "Patient manager"), s1(
                 wxVERTICAL), s2(wxHORIZONTAL), s3(wxVERTICAL), s4(1,
                 0, 0), scrolledIcons(
                 this, wxID_ANY,
                 "Images in patient folder"), actions(this, wxID_ANY,
                 "Actions list"), reports(this, wxID_ANY, "Saved reports"), patientInfos(
                 this, wxID_ANY, "Patient infos"), patientPhoto(this) {
+
+    getAl()->getShownList()->Bind(wxEVT_CHAR, &PatientFileWindow::keyPressed,
+            this);
+
+
     scrolledIcons.SetMinSize(wxSize(100, 100));
     actions.SetMinSize(wxSize(100, 100));
+
+    //Tests
+//    dynamic_cast<wxListCtrl*>(getAl())->SetParent(&actions);
+    getAl()->getShownList()->SetParent(&patientInfos);
+    wxGridSizer *actionsSizer = new wxGridSizer(1);
+    actions.SetSizer(actionsSizer);
+    actionsSizer->Add(getAl()->getShownList(), wxTOP, 20);
+    actions.Fit();
+//tests
     reports.SetMinSize(wxSize(100, 100));
 //    patientInfos.SetMinSize(wxSize(300, 100));
 
@@ -45,7 +59,7 @@ PatientFileWindow::PatientFileWindow() :
     s4.Add(new LabelledInput(&patientInfos, "unique ID:", "00OLOLO"));
     patientInfos.Fit();
 
-
+    Layout();
 }
 
 PatientFileWindow::~PatientFileWindow() {
@@ -74,7 +88,6 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
                 return true;
             }, [this]()
             {
-                //TODO call submit report
             return 0;
         }));
 
@@ -97,17 +110,31 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
                 return true;
             }, [this]()
             {
-//TODO call discard report
             return 0;
         }));
+
+    key = requestKey(); //Request new available keyboard key
+    aH.push_back(ActionsHolder(key, "Go to data processing", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                setChanged();
+                try {
+                    notifyObserver(std::string("improc"),
+                            dynamic_cast<CustomWindow*>(this));
+                } catch (std::exception& e) {
+                    std::cerr << e.what() << '\n';
+                }
+                /* SEE : Returning any doesn't allow void !! */
+                return 0;
+            }));
+
+
     for (auto it = aH.begin(); it != aH.end(); ++it) {
         actionsL.push_back((*it).generateActionLabels());
     }
 
-//    actionsL.push_back(
-//            std::make_pair(std::any_cast<std::string>(key), "Submit report"));
-//    actionsL.push_back(
-//            std::make_pair(std::any_cast<std::string>(key), "Discard report"));
     return actionsL;
 }
 
@@ -122,4 +149,9 @@ void PatientFileWindow::backHome() {
         }
         Hide();
 //    }
+}
+
+
+void PatientFileWindow::keyPressed(wxKeyEvent& event) {
+    CustomWindow::keyPressed(event);
 }

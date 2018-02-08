@@ -10,7 +10,7 @@
 #include "Report/ReportWindow.h"
 
 HomeWindow::HomeWindow() :
-        CustomWindow((wxFrame *) NULL, WindowType::HOME_WINDOW, // FIXME : nullptr -> (wxFrame *) NULL
+        CustomWindow(WindowType::HOME_WINDOW, // FIXME : nullptr -> (wxFrame *) NULL
                 "Home Window") {
 //    actionWindow = new wxWindow(this, wxID_ANY);
 //    aL = new ActionsList(actionWindow);
@@ -18,7 +18,8 @@ HomeWindow::HomeWindow() :
     //setActionsList can't be called right now, as it calls pure virtual method setActionsHolder before creation of the object
 //    setActionsList();
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
-    getAl()->Bind(wxEVT_CHAR, &HomeWindow::keyPressed, this);
+    mainSizer->Add(getAl()->getShownList());
+    getAl()->getShownList()->Bind(wxEVT_CHAR, &HomeWindow::keyPressed, this);
 }
 
 /**
@@ -74,7 +75,6 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                 return true;
             }, [this]()
             {
-//                RDPWindow *addWindow = new RDPWindow(this);
             setChanged();
             try {
                 notifyObserver(std::string("improc"),
@@ -82,7 +82,6 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
             } catch (std::exception& e) {
                 std::cerr << e.what() << '\n';
             }
-            Hide();
             /* SEE : Returning any doesn't allow void !! */
             return 0;
         }));

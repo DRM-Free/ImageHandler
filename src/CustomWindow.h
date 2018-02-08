@@ -20,7 +20,7 @@
 class CustomWindow: public wxFrame, public Observed {
 
 public:
-    CustomWindow(wxWindow* parent, WindowType winType, char const * name);
+    CustomWindow(WindowType winType, char const * name);
 //SEE Virtual method must be implemented in child class
     virtual void displayContextualHelp() =0;
     void keyPressed(wxKeyEvent& event);

@@ -22,11 +22,11 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
             [this](CustomWindow* content, Observed const& observed) -> void
             {
                 if (improcFrame==nullptr) {
-                    improcFrame = new RDPWindow(nullptr);
+                    improcFrame = new RDPWindow();
+                    improcFrame->addObserver(this);
+                    improcFrame->setActionsList();
                 }
-                improcFrame->addObserver(this);
                 improcFrame->Center();
-                improcFrame->setActionsList();
                 improcFrame->Show(true);
                 content->Hide();
             });
@@ -35,10 +35,10 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
             {
                 if (patientFileFrame==nullptr) {
                     patientFileFrame = new PatientFileWindow();
+                    patientFileFrame->addObserver(this);
+                    patientFileFrame->setActionsList();
                 }
-                patientFileFrame->addObserver(this);
                 patientFileFrame->Center();
-                patientFileFrame->setActionsList();
                 patientFileFrame->Show(true);
                 content->Hide();
             });
@@ -47,11 +47,11 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
             [this](CustomWindow* content, Observed const& observed) -> void
             {
                 if (reportFrame==nullptr) {
-                    reportFrame = new ReportWindow(nullptr);
+                    reportFrame = new ReportWindow();
+                    reportFrame->addObserver(this);
+                    reportFrame->setActionsList();
                 }
-                reportFrame->addObserver(this);
                 reportFrame->Center();
-                reportFrame->setActionsList();
                 reportFrame->Show(true);
                 content->Hide();
             });

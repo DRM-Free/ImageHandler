@@ -21,7 +21,7 @@ private:
 
 //-------------------Constructors
 public:
-    ReportWindow(wxWindow* parent);
+    ReportWindow();
     ~ReportWindow();
     void keyPressed(wxKeyEvent& event);
     void backHome();

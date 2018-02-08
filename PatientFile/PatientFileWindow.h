@@ -32,6 +32,8 @@ public:
     void displayContextualHelp();
     std::vector<std::pair<std::string, std::string>> setActionsHolder();
     void backHome();
+    void keyPressed(wxKeyEvent& event);
+
 private:
 
 //-------------------Methods
@@ -43,7 +45,6 @@ private:
 public:
 
 private:
-
 };
 
 #endif /* PATIENTFILEWINDOW_H_ */

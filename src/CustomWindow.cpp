@@ -7,15 +7,15 @@
 
 #include "CustomWindow.h"
 
-CustomWindow::CustomWindow(wxWindow* parent, WindowType winType,
+CustomWindow::CustomWindow(WindowType winType,
         char const * name) :
-        wxFrame(parent, -1, name, wxDefaultPosition, wxDefaultSize,
+        wxFrame(nullptr, -1, name, wxDefaultPosition, wxDefaultSize,
         wxSTAY_ON_TOP) {
     aL = new ActionsList(this);
     escapeKey = WXK_ESCAPE;
     wT = winType;
     Centre();
-    aL->SetFocus(); //Gives focus to aL, so user doesn't have to first click home window
+    aL->getShownList()->SetFocus(); //Gives focus to aL, so user doesn't have to first click home window
     setPreferredKeys("jklmopuinbghty");
 }
 

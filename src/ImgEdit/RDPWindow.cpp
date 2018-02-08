@@ -9,8 +9,8 @@
 #include "../process/image_processing.h"
 #include <exception>
 
-RDPWindow::RDPWindow(wxWindow* parent) :
-        CustomWindow(parent, WindowType::RDP, "Raw data processing"), shouldNotclose {
+RDPWindow::RDPWindow() :
+        CustomWindow(WindowType::RDP, "Raw data processing"), shouldNotclose {
                 false } {
     //Initialisations
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -25,21 +25,14 @@ RDPWindow::RDPWindow(wxWindow* parent) :
 
     mainSizer->Add(controlSizer);
     mainSizer->Add(iW, 3, wxEXPAND);
-    controlSizer->Add(getAl());
+    controlSizer->Add(getAl()->getShownList());
     controlSizer->Add(iL, 1, wxEXPAND);
     SetSizerAndFit(mainSizer);
-
-//    mainSizer->Add(controlSizer);
-//    mainSizer->Add(iW, 3, wxEXPAND);
-//    SetSizerAndFit(mainSizer);
-    //Mise en page
-
-//    controlSizer->Add(getAl());
     iW->forbidSelection();
     escapeKey = WXK_ESCAPE;
     setPreferredKeys("jklmopuinbghty");
 
-    getAl()->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
+    getAl()->getShownList()->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
     iW->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
     iW->SetFocus();
 }
@@ -205,7 +198,6 @@ void RDPWindow::backHome() {
         } catch (std::exception& e) {
             std::cerr << e.what() << '\n';
         }
-        Close();
     }
 }
 

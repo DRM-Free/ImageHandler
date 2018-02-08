@@ -27,7 +27,7 @@
 class RDPWindow: public CustomWindow {
 
 public:
-    RDPWindow(wxWindow* parent);
+    RDPWindow();
     std::string askJPG();
     void displayContextualHelp() override;
     void keyPressed(wxKeyEvent& event);
@@ -49,10 +49,7 @@ public:
         return true;
     }
 ;
-    //TODO: add one "Make Tuple" method that puts selected images in a common set for quicker transformations involving this set of images
-//TODO: add one pickImage method that takes a path as parameter, to be called after an image processing so that it can be displayed in application
     //TODO : add methods for adding selected images to report
-    //TODO : add preview report method and edit report text method
 private:
     bool shouldNotclose;
     wxBoxSizer* controlSizer;
