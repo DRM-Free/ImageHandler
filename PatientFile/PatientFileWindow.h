@@ -9,9 +9,9 @@
 #define PATIENTFILEWINDOW_H_
 
 #include <wx/wx.h>
+#include "../src/CustomWindow.h"
 
-
-class PatientFileWindow: public wxFrame {
+class PatientFileWindow: public CustomWindow {
 //-------------------Attributes
 private:
     wxBoxSizer s1;
@@ -23,15 +23,15 @@ private:
     wxStaticBox reports;
     wxStaticBox patientInfos;
     wxPanel patientPhoto;
-//    wxStaticBox patientBox;
-//    wxStaticBox imagesBox;
 
 
 //-------------------Constructors
 public:
     PatientFileWindow();
     virtual ~PatientFileWindow();
-
+    void displayContextualHelp();
+    std::vector<std::pair<std::string, std::string>> setActionsHolder();
+    void backHome();
 private:
 
 //-------------------Methods

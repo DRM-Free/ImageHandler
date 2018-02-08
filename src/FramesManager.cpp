@@ -11,28 +11,59 @@
 #include <iostream>
 #include <string>
 #include <typeinfo>
-#include "CustomWindow.h"
-
+#include "General/WindowType.h"
 #include "tools/Observed.hpp"
 
-FramesManager::FramesManager(wxFrame* firstFrame) {
+FramesManager::FramesManager(HomeWindow* firstFrame) :
+        homeFrame(firstFrame), improcFrame(nullptr), patientFileFrame(nullptr), reportFrame(
+                nullptr) {
     using namespace std;
-    frames.push_back(firstFrame);
-    addAction<string, CustomWindow*>("frameRequest",
+    addAction<string, CustomWindow*>("improc",
             [this](CustomWindow* content, Observed const& observed) -> void
             {
-                frames.push_back(content);
-                content->addObserver(this);
-                content->Center();
-                content->setActionsList();
-                content->Show(true);
+                if (improcFrame==nullptr) {
+                    improcFrame = new RDPWindow(nullptr);
+                }
+                improcFrame->addObserver(this);
+                improcFrame->Center();
+                improcFrame->setActionsList();
+                improcFrame->Show(true);
+                content->Hide();
             });
+    addAction<string, CustomWindow*>("patientFile",
+            [this](CustomWindow* content, Observed const& observed) -> void
+            {
+                if (patientFileFrame==nullptr) {
+                    patientFileFrame = new PatientFileWindow();
+                }
+                patientFileFrame->addObserver(this);
+                patientFileFrame->Center();
+                patientFileFrame->setActionsList();
+                patientFileFrame->Show(true);
+                content->Hide();
+            });
+
+    addAction<string, CustomWindow*>("report",
+            [this](CustomWindow* content, Observed const& observed) -> void
+            {
+                if (reportFrame==nullptr) {
+                    reportFrame = new ReportWindow(nullptr);
+                }
+                reportFrame->addObserver(this);
+                reportFrame->Center();
+                reportFrame->setActionsList();
+                reportFrame->Show(true);
+                content->Hide();
+            });
+
 
     addAction<string, CustomWindow*>("backHome",
             [this](CustomWindow* content, Observed const& observed) -> void
             {
-                frames[0]->Show();
+                homeFrame->Show();
+                content->Hide();
             });
+
 }
 
 FramesManager::~FramesManager() {

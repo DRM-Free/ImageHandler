@@ -11,39 +11,22 @@ CustomWindow::CustomWindow(wxWindow* parent, WindowType winType,
         char const * name) :
         wxFrame(parent, -1, name, wxDefaultPosition, wxDefaultSize,
         wxSTAY_ON_TOP) {
-    //Initialisations
-//    actionWindow = new wxWindow(this, wxID_ANY);
     aL = new ActionsList(this);
     escapeKey = WXK_ESCAPE;
     wT = winType;
-    mainSizer = new wxBoxSizer(wxHORIZONTAL);
-    //Initialisations
-
-    //Mise en page
-
-//    mainSizer->Add(actionWindow);
-//    SetSizerAndFit(mainSizer);
     Centre();
-    //Mise en page
-
     aL->SetFocus(); //Gives focus to aL, so user doesn't have to first click home window
-    setPreferredKeys();
+    setPreferredKeys("jklmopuinbghty");
 }
 
 CustomWindow::~CustomWindow() {
 
 }
 
-void CustomWindow::setPreferredKeys() {
-    addPreferredKey('j');
-    addPreferredKey('k');
-    addPreferredKey('l');
-    addPreferredKey('m');
-    addPreferredKey('n');
-    addPreferredKey('b');
-    addPreferredKey('o');
-    addPreferredKey('p');
-    addPreferredKey('h');
+void CustomWindow::setPreferredKeys(std::string keys) {
+    for (auto it = keys.begin(); it != keys.end(); ++it) {
+        addPreferredKey(*it);
+    }
 }
 
 void CustomWindow::keyPressed(wxKeyEvent& event) {

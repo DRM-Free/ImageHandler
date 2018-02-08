@@ -36,6 +36,7 @@ public:
 public:
 
 private:
+    wxBoxSizer* mainSizer;
 
 //-------------------Getters&Setters
 public:

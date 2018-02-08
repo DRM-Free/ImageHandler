@@ -17,6 +17,7 @@ HomeWindow::HomeWindow() :
     //SEE One can't call pure virtual method in child constructor !
     //setActionsList can't be called right now, as it calls pure virtual method setActionsHolder before creation of the object
 //    setActionsList();
+    mainSizer = new wxBoxSizer(wxHORIZONTAL);
     getAl()->Bind(wxEVT_CHAR, &HomeWindow::keyPressed, this);
 }
 
@@ -46,15 +47,13 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                 return true;
             }, [this]()
             {
-                ReportWindow *addWindow = new ReportWindow(this);
                 setChanged();
                 try {
-                    notifyObserver(std::string("frameRequest"),
-                            dynamic_cast<CustomWindow*>(addWindow));
+                    notifyObserver(std::string("report"),
+                            dynamic_cast<CustomWindow*>(this));
                 } catch (std::exception& e) {
                     std::cerr << e.what() << '\n';
                 }
-                Hide();
                 /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
@@ -75,18 +74,37 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                 return true;
             }, [this]()
             {
-                RDPWindow *addWindow = new RDPWindow(this);
+//                RDPWindow *addWindow = new RDPWindow(this);
+            setChanged();
+            try {
+                notifyObserver(std::string("improc"),
+                        dynamic_cast<CustomWindow*>(this));
+            } catch (std::exception& e) {
+                std::cerr << e.what() << '\n';
+            }
+            Hide();
+            /* SEE : Returning any doesn't allow void !! */
+            return 0;
+        }));
+
+    key = requestKey(); //Request new available keyboard key
+    aH.push_back(ActionsHolder(key, "Browse patient data", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+//                RDPWindow *addWindow = new RDPWindow(this);
                 setChanged();
                 try {
-                    notifyObserver(std::string("frameRequest"),
-                            dynamic_cast<CustomWindow*>(addWindow));
+                notifyObserver(std::string("patientFile"),
+                        dynamic_cast<CustomWindow*>(this));
                 } catch (std::exception& e) {
                     std::cerr << e.what() << '\n';
                 }
-                Hide();
-                /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
+
+
 
     for (auto it = aH.begin(); it != aH.end(); ++it) {
         actionsL.push_back((*it).generateActionLabels());

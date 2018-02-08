@@ -7,10 +7,11 @@
 
 #include "PatientFileWindow.h"
 #include "LabelledInput.h"
+#include "../src/General/WindowType.h"
 
 PatientFileWindow::PatientFileWindow() :
-        wxFrame(nullptr, -1, "Patient file", wxDefaultPosition, wxDefaultSize,
-        wxSTAY_ON_TOP), s1(wxVERTICAL), s2(wxHORIZONTAL), s3(wxVERTICAL), s4(1,
+        CustomWindow(nullptr, WindowType::PATIENT_MANAGER, "Patient manager"), s1(
+                wxVERTICAL), s2(wxHORIZONTAL), s3(wxVERTICAL), s4(1,
                 0, 0), scrolledIcons(
                 this, wxID_ANY,
                 "Images in patient folder"), actions(this, wxID_ANY,
@@ -37,38 +38,6 @@ PatientFileWindow::PatientFileWindow() :
     s3.Add(&reports, 1, wxEXPAND);
 
     patientInfos.SetSizer(&s4, true);
-//    wxStaticText *fn = new wxStaticText(&patientInfos, wxID_ANY,
-//            "first name : ");
-//    wxStaticText *ln = new wxStaticText(&patientInfos, wxID_ANY,
-//            "last name : ");
-//    wxStaticText *bd = new wxStaticText(&patientInfos, wxID_ANY,
-//            "birth date : ");
-//    wxStaticText *id = new wxStaticText(&patientInfos, wxID_ANY,
-//            "unique ID : ");
-//
-//
-//    wxTextCtrl *firstName = new wxTextCtrl(&patientInfos, wxID_ANY,
-//            "Pierre-Jean", wxDefaultPosition, wxSize(200, 25),
-//            wxTE_READONLY);
-//    wxTextCtrl *lastName = new wxTextCtrl(&patientInfos, wxID_ANY,
-//            "Lartaud",
-//            wxDefaultPosition, wxSize(200, 25),
-//            wxTE_READONLY);
-//    wxTextCtrl *birthDate = new wxTextCtrl(&patientInfos, wxID_ANY,
-//            "unknown",
-//            wxDefaultPosition, wxSize(200, 25),
-//            wxTE_READONLY);
-//    wxTextCtrl *uniqueID = new wxTextCtrl(&patientInfos, wxID_ANY,
-//            "000000000LOLOLO", wxDefaultPosition, wxSize(200, 25),
-//            wxTE_READONLY);
-//    s4.Add(fn);
-//    s4.Add(firstName);
-//    s4.Add(ln);
-//    s4.Add(lastName);
-//    s4.Add(bd);
-//    s4.Add(birthDate);
-//    s4.Add(id);
-//    s4.Add(uniqueID);
 
     s4.Add(new LabelledInput(&patientInfos, "first name :", "Pierre-Jean"));
     s4.Add(new LabelledInput(&patientInfos, "last name :", "Lartaud"));
@@ -76,16 +45,81 @@ PatientFileWindow::PatientFileWindow() :
     s4.Add(new LabelledInput(&patientInfos, "unique ID:", "00OLOLO"));
     patientInfos.Fit();
 
-//    wxStaticBox *imagesContour = new wxStaticBox(&scrolledIcons, wxID_ANY,
-//            "Patient images");
-//    wxBoxSizer *s5 = new wxBoxSizer(wxHORIZONTAL);
-//    scrolledIcons.SetSizer(s5, true);
-//    s5->Add(imagesContour, wxEXPAND);
-//    wxTextCtrl *text = new wxTextCtrl(imagesContour, wxID_ANY, "This is text");
-
 
 }
 
 PatientFileWindow::~PatientFileWindow() {
 }
 
+void PatientFileWindow::displayContextualHelp() {
+}
+
+std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHolder() {
+    std::vector<std::pair<std::string, std::string>> actionsL;
+
+    aH.push_back(ActionsHolder(escapeKey, "Back Home", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                backHome();
+                /* SEE : Returning any doesn't allow void !! */
+                return 0;
+            }));
+
+    char key = requestKey(); //Request new available keyboard key
+
+    aH.push_back(ActionsHolder(key, "new report", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                //TODO call submit report
+            return 0;
+        }));
+
+    key = requestKey(); //Request new available keyboard key
+
+    aH.push_back(ActionsHolder(key, "Display contextual help", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                this->displayContextualHelp();
+                /* SEE : Returning any doesn't allow void !! */
+                return 0;
+            }));
+
+    key = requestKey(); //Request new available keyboard key
+
+    aH.push_back(ActionsHolder(key, "Pick patient", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+//TODO call discard report
+            return 0;
+        }));
+    for (auto it = aH.begin(); it != aH.end(); ++it) {
+        actionsL.push_back((*it).generateActionLabels());
+    }
+
+//    actionsL.push_back(
+//            std::make_pair(std::any_cast<std::string>(key), "Submit report"));
+//    actionsL.push_back(
+//            std::make_pair(std::any_cast<std::string>(key), "Discard report"));
+    return actionsL;
+}
+
+void PatientFileWindow::backHome() {
+//    if (!shouldNotclose) {
+        setChanged();
+        try {
+            notifyObserver(std::string("backHome"),
+                    dynamic_cast<CustomWindow*>(this));
+        } catch (std::exception& e) {
+            std::cerr << e.what() << '\n';
+        }
+        Hide();
+//    }
+}

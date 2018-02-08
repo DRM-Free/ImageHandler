@@ -12,7 +12,8 @@ ReportWindow::ReportWindow(wxWindow* parent) :
                 new ReportForm(this)), controlSizer(
                 new wxBoxSizer(wxVERTICAL)), shouldNotclose {
                 false } {
-    setPreferredKeys();
+    mainSizer = new wxBoxSizer(wxHORIZONTAL);
+    setPreferredKeys("jklmopuinbghty");
     rF->setForm();
     wT = WindowType::RM;
     getAl()->Bind(wxEVT_CHAR, &ReportWindow::keyPressed, this);
@@ -31,7 +32,6 @@ void ReportWindow::backHome() {
         } catch (std::exception& e) {
             std::cerr << e.what() << '\n';
         }
-        Hide();
     }
 }
 void ReportWindow::addReportElement() {

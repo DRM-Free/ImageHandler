@@ -32,13 +32,12 @@ public:
     void setActionsList();
     void updateActionsList(); //This calls updateActionsHolder by itself
     void doAction(char c);
-    void setPreferredKeys();
+    void setPreferredKeys(std::string keys);
     virtual ~CustomWindow();
 private:
 //    wxWindow* actionWindow;
     ActionsList* aL;
 protected:
-    wxBoxSizer* mainSizer;
     ActionsList* getAl();
 
     //SEE no attribute should be protected nor public

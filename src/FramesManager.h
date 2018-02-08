@@ -11,14 +11,23 @@
 #include "tools/Observer.hpp"
 #include <vector>
 #include "wx/wx.h"
+#include "CustomWindow.h"
+#include "ImgEdit/RDPWindow.h"
+#include "../PatientFile/PatientFileWindow.h"
+#include "HomeWindow.h"
+#include "Report/ReportWindow.h"
 
 class FramesManager: public Observer {
 //-------------------Attributes
 private:
-    std::vector<wxFrame*> frames;
+//    std::vector<wxFrame*> frames;
+    HomeWindow *homeFrame;
+    RDPWindow *improcFrame;
+    PatientFileWindow *patientFileFrame;
+    ReportWindow *reportFrame;
 //-------------------Constructors
 public:
-    FramesManager(wxFrame* firstFrame);
+    FramesManager(HomeWindow* firstFrame);
     virtual ~FramesManager();
 
 private:

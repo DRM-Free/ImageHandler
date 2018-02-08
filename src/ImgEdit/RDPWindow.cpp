@@ -13,6 +13,7 @@ RDPWindow::RDPWindow(wxWindow* parent) :
         CustomWindow(parent, WindowType::RDP, "Raw data processing"), shouldNotclose {
                 false } {
     //Initialisations
+    mainSizer = new wxBoxSizer(wxHORIZONTAL);
     controlSizer = new wxBoxSizer(wxVERTICAL);
     iW = new ImageWindow(this);
     iL = new ScrolledList(this);
@@ -36,7 +37,7 @@ RDPWindow::RDPWindow(wxWindow* parent) :
 //    controlSizer->Add(getAl());
     iW->forbidSelection();
     escapeKey = WXK_ESCAPE;
-    setPreferredKeys();
+    setPreferredKeys("jklmopuinbghty");
 
     getAl()->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);
     iW->Bind(wxEVT_CHAR, &RDPWindow::keyPressed, this);

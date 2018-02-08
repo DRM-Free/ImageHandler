@@ -27,6 +27,7 @@ public:
 
 private:
     WindowType const id = WindowType::HOME_WINDOW;
+    wxBoxSizer* mainSizer;
 
 };
 
