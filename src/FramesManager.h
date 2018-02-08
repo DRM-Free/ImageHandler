@@ -13,7 +13,7 @@
 #include "wx/wx.h"
 #include "CustomWindow.h"
 #include "ImgEdit/RDPWindow.h"
-#include "../PatientFile/PatientFileWindow.h"
+#include "PatientFile/PatientFileWindow.h"
 #include "HomeWindow.h"
 #include "Report/ReportWindow.h"
 

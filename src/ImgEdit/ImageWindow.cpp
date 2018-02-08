@@ -12,7 +12,7 @@
 #include <algorithm>
 #include <exception>
 
-ImageWindow::ImageWindow(wxWindow* parent, std::string path) :
+ImageWindow::ImageWindow(wxWindow* parent, fs::path path) :
         wxScrolledWindow(parent, wxID_ANY), imPath(path), selected(false), selectible(
                 true) {
     setBitmap(path);
@@ -56,15 +56,12 @@ void ImageWindow::OnDraw(wxDC& dc) {
         dc.DrawBitmap(bitmap, 0, 0, false);
 
         if (selected) {
-            //####Test code for alpha painting####
             wxPaintDC paintDc(this);
             wxGraphicsContext *gc = wxGraphicsContext::Create(paintDc);
             if (gc) {
                 gc->SetPen(wxPen(wxColour(250, 5, 5), 5));
-//            wxPen (const wxColour &colour, int width=1, wxPenStyle style=wxPENSTYLE_SOLID)
                 wxGraphicsPath path = gc->CreatePath();
                 double regularSize = 30.0;
-                //Regularpositionw =0 -> Position on the left
                 //SEE GetVirtualSize gives total size including scrolled unvisible parts of the window. GetSize gives only onscreen window size
                 double regularPositionw = std::min(
                         int(GetSize().GetWidth() - regularSize - 50),
@@ -91,7 +88,6 @@ void ImageWindow::OnDraw(wxDC& dc) {
                 gc->StrokePath(path);
                 delete gc;
             }
-            //####Test code for alpha painting####
         }
     }
 }
@@ -124,10 +120,10 @@ void ImageWindow::iconize(wxSize size) {
  *
  * @param path chemin vers l'image ou "" pour pas d'image
  */
-void ImageWindow::setBitmap(std::string path) {
+void ImageWindow::setBitmap(fs::path path) {
 
     if (path != "") {
-        bitmap.LoadFile(path);
+        bitmap.LoadFile(std::string(path));
         if (!(this->bitmap.IsOk())) {
             throw std::invalid_argument("image not successfully loaded");
         } else {
@@ -143,7 +139,7 @@ bool ImageWindow::hasImage() const {
     return imPath != "";
 }
 
-std::string ImageWindow::getImPath() const {
+fs::path ImageWindow::getImPath() const {
     return imPath;
 }
 

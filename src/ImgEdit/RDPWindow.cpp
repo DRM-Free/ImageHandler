@@ -106,7 +106,6 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
             }, [this]()
             {
                 backHome();
-                /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
 
@@ -117,7 +116,6 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
             }, [this]()
             {
                 this->pickImage();
-                /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
 
@@ -128,7 +126,6 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
             }, [this]()
             {
                 this->iL->clearSelected();
-                /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
 

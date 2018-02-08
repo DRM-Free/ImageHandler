@@ -27,6 +27,7 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                     improcFrame->setActionsList();
                 }
                 improcFrame->Center();
+                improcFrame->setFocus();
                 improcFrame->Show(true);
                 content->Hide();
             });
@@ -39,6 +40,7 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                     patientFileFrame->setActionsList();
                 }
                 patientFileFrame->Center();
+                patientFileFrame->setFocus();
                 patientFileFrame->Show(true);
                 content->Hide();
             });
@@ -52,6 +54,7 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                     reportFrame->setActionsList();
                 }
                 reportFrame->Center();
+                reportFrame->setFocus();
                 reportFrame->Show(true);
                 content->Hide();
             });
@@ -60,6 +63,7 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
     addAction<string, CustomWindow*>("backHome",
             [this](CustomWindow* content, Observed const& observed) -> void
             {
+                homeFrame->setFocus();
                 homeFrame->Show();
                 content->Hide();
             });

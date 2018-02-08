@@ -57,7 +57,6 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
                     }, [this]()
                     {
                 backHome();
-                        /* SEE : Returning any doesn't allow void !! */
                         return 0;
                     }));
 
@@ -80,7 +79,6 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
             }, [this]()
             {
                 this->displayContextualHelp();
-                /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
 

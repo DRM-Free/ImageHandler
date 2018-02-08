@@ -27,7 +27,6 @@ std::pair<std::string, std::string> ActionsHolder::generateActionLabels() {
     if (key == '\0') {
         return std::make_pair("N/A", description);
     }
-//TODO specify to user the requirements to meet to make action available
     if (key == WXK_ESCAPE) {
         return std::make_pair("Esc", description);
     }

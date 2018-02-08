@@ -10,7 +10,7 @@
 #include "Report/ReportWindow.h"
 
 HomeWindow::HomeWindow() :
-        CustomWindow(WindowType::HOME_WINDOW, // FIXME : nullptr -> (wxFrame *) NULL
+        CustomWindow(WindowType::HOME_WINDOW,
                 "Home Window") {
 //    actionWindow = new wxWindow(this, wxID_ANY);
 //    aL = new ActionsList(actionWindow);
@@ -38,7 +38,6 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                     }, [this]()
                     {
                 this->Close(true);
-                        /* SEE : Returning any doesn't allow void !! */
                         return 0;
                     }));
 
@@ -55,7 +54,6 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                 } catch (std::exception& e) {
                     std::cerr << e.what() << '\n';
                 }
-                /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
 
@@ -82,7 +80,6 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
             } catch (std::exception& e) {
                 std::cerr << e.what() << '\n';
             }
-            /* SEE : Returning any doesn't allow void !! */
             return 0;
         }));
 
@@ -109,9 +106,6 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
         actionsL.push_back((*it).generateActionLabels());
     }
 
-//    actionsL.push_back(std::make_pair(std::to_string(key), "Process raw data"));
-//    actionsL.push_back(
-//            std::make_pair(std::any_cast<std::string>(key), "New report"));
     return actionsL;
 }
 

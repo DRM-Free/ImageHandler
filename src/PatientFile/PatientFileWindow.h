@@ -9,7 +9,11 @@
 #define PATIENTFILEWINDOW_H_
 
 #include <wx/wx.h>
-#include "../src/CustomWindow.h"
+#include "../CustomWindow.h"
+#include "../ImgEdit/ScrolledIconsList.h"
+#include "ScrolledReportList.h"
+#include <string>
+#include <experimental/filesystem>
 
 class PatientFileWindow: public CustomWindow {
 //-------------------Attributes
@@ -23,7 +27,8 @@ private:
     wxStaticBox reports;
     wxStaticBox patientInfos;
     wxPanel patientPhoto;
-
+    ScrolledIconsList sIL;
+    ScrolledReportList sRL;
 
 //-------------------Constructors
 public:
@@ -33,6 +38,7 @@ public:
     std::vector<std::pair<std::string, std::string>> setActionsHolder();
     void backHome();
     void keyPressed(wxKeyEvent& event);
+    void pickPatient();
 
 private:
 

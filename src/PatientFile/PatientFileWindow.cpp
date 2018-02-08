@@ -7,40 +7,39 @@
 
 #include "PatientFileWindow.h"
 #include "LabelledInput.h"
-#include "../src/General/WindowType.h"
+#include "../General/WindowType.h"
 
 PatientFileWindow::PatientFileWindow() :
         CustomWindow(WindowType::PATIENT_MANAGER, "Patient manager"), s1(
-                wxVERTICAL), s2(wxHORIZONTAL), s3(wxVERTICAL), s4(1,
+                wxVERTICAL), s2(wxHORIZONTAL), s3(wxVERTICAL), s4(2,
                 0, 0), scrolledIcons(
                 this, wxID_ANY,
                 "Images in patient folder"), actions(this, wxID_ANY,
                 "Actions list"), reports(this, wxID_ANY, "Saved reports"), patientInfos(
-                this, wxID_ANY, "Patient infos"), patientPhoto(this) {
+                this, wxID_ANY, "Patient infos"), patientPhoto(
+                this), sIL(&scrolledIcons), sRL(&reports) {
 
     getAl()->getShownList()->Bind(wxEVT_CHAR, &PatientFileWindow::keyPressed,
             this);
 
 
     scrolledIcons.SetMinSize(wxSize(100, 100));
-    actions.SetMinSize(wxSize(100, 100));
+    actions.SetMinSize(wxSize(300, 200));
 
     //Tests
 //    dynamic_cast<wxListCtrl*>(getAl())->SetParent(&actions);
     getAl()->getShownList()->SetParent(&patientInfos);
-    wxGridSizer *actionsSizer = new wxGridSizer(1);
+    wxBoxSizer *actionsSizer = new wxBoxSizer(wxVERTICAL);
     actions.SetSizer(actionsSizer);
-    actionsSizer->Add(getAl()->getShownList(), wxTOP, 20);
-    actions.Fit();
+    actionsSizer->Add(getAl()->getShownList(), 1, wxALL, 20);
 //tests
     reports.SetMinSize(wxSize(100, 100));
 //    patientInfos.SetMinSize(wxSize(300, 100));
-
     SetSize(wxSize(1500, 800));
     Center();
 
     SetSizer(&s1, true);
-    s1.Add(&s2, 1, wxEXPAND);
+    s1.Add(&s2, 2, wxEXPAND);
     s1.Add(&scrolledIcons, 1, wxEXPAND);
 
     s2.Add(&s3, 1, wxEXPAND);
@@ -48,15 +47,14 @@ PatientFileWindow::PatientFileWindow() :
     s2.Add(&patientPhoto, 2, wxEXPAND);
 
 
-    s3.Add(&actions, 1, wxEXPAND);
-    s3.Add(&reports, 1, wxEXPAND);
+    s3.Add(&actions, 1);
+    s1.Add(&reports, 1);
+
 
     patientInfos.SetSizer(&s4, true);
 
-    s4.Add(new LabelledInput(&patientInfos, "first name :", "Pierre-Jean"));
-    s4.Add(new LabelledInput(&patientInfos, "last name :", "Lartaud"));
-    s4.Add(new LabelledInput(&patientInfos, "birth date:", "Unknown"));
-    s4.Add(new LabelledInput(&patientInfos, "unique ID:", "00OLOLO"));
+
+    actions.Fit();
     patientInfos.Fit();
 
     Layout();
@@ -77,7 +75,6 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
             }, [this]()
             {
                 backHome();
-                /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
 
@@ -99,7 +96,6 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
             }, [this]()
             {
                 this->displayContextualHelp();
-                /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
 
@@ -110,6 +106,7 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
                 return true;
             }, [this]()
             {
+                pickPatient();
             return 0;
         }));
 
@@ -126,7 +123,6 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
                 } catch (std::exception& e) {
                     std::cerr << e.what() << '\n';
                 }
-                /* SEE : Returning any doesn't allow void !! */
                 return 0;
             }));
 
@@ -154,4 +150,21 @@ void PatientFileWindow::backHome() {
 
 void PatientFileWindow::keyPressed(wxKeyEvent& event) {
     CustomWindow::keyPressed(event);
+}
+
+void PatientFileWindow::pickPatient() {
+    s4.Clear(0);
+    s4.Add(new LabelledInput(&patientInfos, "first name :", "Pierre-Jean"));
+    s4.Add(new LabelledInput(&patientInfos, "last name :", "Lartaud"));
+    s4.Add(new LabelledInput(&patientInfos, "birth date:", "Unknown"));
+    s4.Add(new LabelledInput(&patientInfos, "unique ID:", "00OLOLO"));
+
+//    fs::path demoPath = "resources/DemoPatient/";
+    fs::path demoImgPath =
+            "/home/anael/eclipse-workspace/ImageProject2/resources/DemoPatient/RawData";
+//    sIL.appendImageWindows(demoImgPath);
+    fs::path demoReportPath =
+            "/home/anael/eclipse-workspace/ImageProject2/resources/DemoPatient/Reports";
+    sRL.setReports(demoReportPath);
+    Layout();
 }

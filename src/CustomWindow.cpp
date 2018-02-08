@@ -99,3 +99,7 @@ void CustomWindow::doAction(char c) {
 ActionsList* CustomWindow::getAl() {
     return aL;
 }
+
+void CustomWindow::setFocus() {
+    aL->getShownList()->SetFocus();
+}

@@ -14,6 +14,8 @@
 #include <tuple>
 #include "../tools/Observer.hpp"
 #include <map>
+#include <experimental/filesystem>
+
 
 class ScrolledIconsList: public wxScrolledWindow {
 //-------------------Attributes
@@ -30,7 +32,7 @@ public:
 private:
 //-------------------Methods
 public:
-    void appendImageWindows(std::string const& window);
+    void appendImageWindows(fs::path const& imPath); //adds images from all files in a directory or single file
     void addImageWindowsToSelected(ImageWindow* iW);
     void removeImageWindowsFromSelected(ImageWindow* iW);
 

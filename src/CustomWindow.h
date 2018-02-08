@@ -16,6 +16,9 @@
 #include "General/ActionsHolder.h"
 #include <functional>
 #include <utility>
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 class CustomWindow: public wxFrame, public Observed {
 
@@ -34,6 +37,8 @@ public:
     void doAction(char c);
     void setPreferredKeys(std::string keys);
     virtual ~CustomWindow();
+    void setFocus();
+
 private:
 //    wxWindow* actionWindow;
     ActionsList* aL;

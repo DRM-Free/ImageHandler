@@ -43,11 +43,6 @@ public:
     std::vector<std::vector<int>> countBC();
     void featuresEnhancement();
     std::vector<ImageWindow> getSelectedImg();
-
-    //Test function
-    static bool returnTrue() {
-        return true;
-    }
 ;
     //TODO : add methods for adding selected images to report
 private:
