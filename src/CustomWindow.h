@@ -38,10 +38,13 @@ public:
     void setPreferredKeys(std::string keys);
     virtual ~CustomWindow();
     void setFocus();
+    fs::path const getPatientPath();
+    void setPatientPath(fs::path newPath);
 
 private:
 //    wxWindow* actionWindow;
     ActionsList* aL;
+    fs::path patientPath;
 protected:
     ActionsList* getAl();
 

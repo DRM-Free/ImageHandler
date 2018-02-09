@@ -10,8 +10,7 @@
 CustomWindow::CustomWindow(WindowType winType,
         char const * name) :
         wxFrame(nullptr, -1, name, wxDefaultPosition, wxDefaultSize,
-        wxSTAY_ON_TOP) {
-    aL = new ActionsList(this);
+        wxSTAY_ON_TOP), aL(new ActionsList(this)), patientPath("") {
     escapeKey = WXK_ESCAPE;
     wT = winType;
     Centre();
@@ -94,6 +93,14 @@ void CustomWindow::doAction(char c) {
             (*it).doBehaviour();
         }
     }
+}
+
+fs::path const CustomWindow::getPatientPath() {
+    return patientPath;
+}
+
+void CustomWindow::setPatientPath(fs::path newPath) {
+    patientPath = newPath;
 }
 
 ActionsList* CustomWindow::getAl() {

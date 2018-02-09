@@ -162,7 +162,7 @@ void PatientFileWindow::pickPatient() {
 //    fs::path demoPath = "resources/DemoPatient/";
     fs::path demoImgPath =
             "/home/anael/eclipse-workspace/ImageProject2/resources/DemoPatient/RawData";
-//    sIL.appendImageWindows(demoImgPath);
+    sIL.appendImageWindows(demoImgPath);
     fs::path demoReportPath =
             "/home/anael/eclipse-workspace/ImageProject2/resources/DemoPatient/Reports";
     sRL.setReports(demoReportPath);

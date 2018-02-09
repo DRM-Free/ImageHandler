@@ -28,6 +28,7 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                 }
                 improcFrame->Center();
                 improcFrame->setFocus();
+                dynamic_cast<CustomWindow*> (improcFrame)->setPatientPath(dynamic_cast<CustomWindow*> (content)->getPatientPath());
                 improcFrame->Show(true);
                 content->Hide();
             });
@@ -41,6 +42,7 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                 }
                 patientFileFrame->Center();
                 patientFileFrame->setFocus();
+                dynamic_cast<CustomWindow*> (patientFileFrame)->setPatientPath(dynamic_cast<CustomWindow*> (content)->getPatientPath());
                 patientFileFrame->Show(true);
                 content->Hide();
             });
@@ -55,6 +57,7 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                 }
                 reportFrame->Center();
                 reportFrame->setFocus();
+                dynamic_cast<CustomWindow*> (reportFrame)->setPatientPath(dynamic_cast<CustomWindow*> (content)->getPatientPath());
                 reportFrame->Show(true);
                 content->Hide();
             });
@@ -64,6 +67,7 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
             [this](CustomWindow* content, Observed const& observed) -> void
             {
                 homeFrame->setFocus();
+                dynamic_cast<CustomWindow*> (homeFrame)->setPatientPath(dynamic_cast<CustomWindow*> (content)->getPatientPath());
                 homeFrame->Show();
                 content->Hide();
             });
