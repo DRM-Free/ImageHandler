@@ -11,23 +11,30 @@
 
 RDPWindow::RDPWindow() :
         CustomWindow(WindowType::RDP, "Raw data processing"), shouldNotclose {
-                false } {
+                false }, actions(this, wxID_ANY, "available actions") {
     //Initialisations
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
     controlSizer = new wxBoxSizer(wxVERTICAL);
     iW = new ImageWindow(this);
     iL = new ScrolledList(this);
     wT = WindowType::RDP;
+    SetSize(wxSize(1800, 1000));
+
+    getAl()->getShownList()->SetParent(&actions);
+    actions.SetMinSize(wxSize(300, 400));
+    wxBoxSizer *actionsSizer = new wxBoxSizer(wxVERTICAL);
+    actions.SetSizer(actionsSizer);
+    actionsSizer->Add(getAl()->getShownList(), 1, wxALL, 20);
 
     //Initialisations
 
     //Mise en page
 
-    mainSizer->Add(controlSizer);
-    mainSizer->Add(iW, 3, wxEXPAND);
-    controlSizer->Add(getAl()->getShownList());
+    mainSizer->Add(controlSizer, 1, wxEXPAND);
+    mainSizer->Add(iW, 7, wxEXPAND);
+    controlSizer->Add(&actions);
     controlSizer->Add(iL, 1, wxEXPAND);
-    SetSizerAndFit(mainSizer);
+    SetSizer(mainSizer);
     iW->forbidSelection();
     escapeKey = WXK_ESCAPE;
     setPreferredKeys("jklmopuinbghty");
@@ -120,9 +127,27 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
             }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Clear selected", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Report results", [this]()->bool //
             {
                 return true;
+            }, [this]()
+            {
+                if (isAllowedToClose()) {
+                    setChanged();
+                    try {
+                        notifyObserver(std::string("report"),
+                                dynamic_cast<CustomWindow*>(this));
+                    } catch (std::exception& e) {
+                        std::cerr << e.what() << '\n';
+                    }
+                }
+                return 0;
+            }));
+
+    key = requestKey(); //Request new available keyboard key
+    aH.push_back(ActionsHolder(key, "Clear selected", [this]()->bool //
+            {
+                return SelectedImageWindows.size()>=1;
             }, [this]()
             {
                 this->iL->clearSelected();
@@ -132,7 +157,7 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
     key = requestKey(); //Request new available keyboard key
     aH.push_back(ActionsHolder(key, "Enhance blood features", [this]()->bool //
             {
-                return true;
+                return SelectedImageWindows.size()>=1;
             }, [this]()
             {
                 featuresEnhancement();
@@ -142,7 +167,7 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
     key = requestKey(); //Request new available keyboard key
     aH.push_back(ActionsHolder(key, "Display cells counts", [this]()->bool //
             {
-                return true;
+                        return SelectedImageWindows.size()>=1;
             }, [this]()
             {
                 std::vector<std::vector<int>> counts = countBC();
@@ -159,7 +184,7 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
     key = requestKey(); //Request new available keyboard key
     aH.push_back(ActionsHolder(key, "Make tuple", [this]()->bool //
             {
-                return true;
+                return SelectedImageWindows.size()>=2;
             }, [this]
             {
                 makeTuple();

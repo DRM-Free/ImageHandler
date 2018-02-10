@@ -8,47 +8,37 @@
 #include "PatientFileWindow.h"
 #include "LabelledInput.h"
 #include "../General/WindowType.h"
+#include "../ImgEdit/ImageWindow.h"
 
 PatientFileWindow::PatientFileWindow() :
         CustomWindow(WindowType::PATIENT_MANAGER, "Patient manager"), s1(
                 wxVERTICAL), s2(wxHORIZONTAL), s3(wxVERTICAL), s4(2,
                 0, 0), actions(
                 this, wxID_ANY,
-                "Actions list"), reports(this, wxID_ANY, "Saved reports"), patientInfos(
+                "Actions list"), patientInfos(
                 this, wxID_ANY, "Patient infos"), patientPhoto(
-                this), sIL(this), sRL(&reports) {
-//        CustomWindow(WindowType::PATIENT_MANAGER, "Patient manager"), s1(
-//                wxVERTICAL), s2(wxHORIZONTAL), s3(wxVERTICAL), s4(2,
-//                0, 0), scrolledIcons(
-//                this, wxID_ANY,
-//                "Images in patient folder"), actions(this, wxID_ANY,
-//                "Actions list"), reports(this, wxID_ANY, "Saved reports"), patientInfos(
-//                this, wxID_ANY, "Patient infos"), patientPhoto(
-//                this), sIL(&scrolledIcons), sRL(&reports) {
-
+                this), patientImages(this), patientReports(
+                this) {
     getAl()->getShownList()->Bind(wxEVT_CHAR, &PatientFileWindow::keyPressed,
             this);
 
 
-    sIL.SetMinSize(wxSize(100, 100));
-//    scrolledIcons.SetMinSize(wxSize(100, 100));
+    patientImages.SetMinSize(wxSize(100, 100));
+    patientPhoto.SetSize(wxSize(200, 200));
 
     actions.SetMinSize(wxSize(300, 200));
 
-    getAl()->getShownList()->SetParent(&patientInfos);
     wxBoxSizer *actionsSizer = new wxBoxSizer(wxVERTICAL);
     actions.SetSizer(actionsSizer);
     actionsSizer->Add(getAl()->getShownList(), 1, wxALL, 20);
 //tests
-    reports.SetMinSize(wxSize(100, 100));
-    SetSize(wxSize(1500, 800));
+    SetSize(wxSize(1800, 1000));
     Center();
 
     SetSizer(&s1, true);
-    s1.Add(&s2, 2, wxEXPAND);
-
-    s1.Add(&sIL, 1, wxEXPAND);
-//    s1.Add(&scrolledIcons, 1, wxEXPAND);
+    s1.Add(&s2, 1);
+    s1.Add(&patientImages, 1, wxEXPAND);
+    s1.Add(patientReports.getReportIcons(), 1, wxEXPAND);
 
     s2.Add(&s3, 1, wxEXPAND);
     s2.Add(&patientInfos, 1, wxEXPAND);
@@ -56,18 +46,9 @@ PatientFileWindow::PatientFileWindow() :
 
 
     s3.Add(&actions, 1);
-    s1.Add(&reports, 1);
 
 
     patientInfos.SetSizer(&s4, true);
-
-
-//    actions.Fit();
-//    patientInfos.Fit();
-
-    //Test sizer for reports
-//    wxBoxSizer* reportsizer = new wxBoxSizer(wxHORIZONTAL);
-//    reportsizer->Add(sRL.getReportIcons(), 1, wxEXPAND);
 
     Layout();
 }
@@ -138,6 +119,22 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
                 return 0;
             }));
 
+    key = requestKey(); //Request new available keyboard key
+    aH.push_back(ActionsHolder(key, "New report", [this]()->bool //
+            {
+                return true;
+            }, [this]()
+            {
+                setChanged();
+                try {
+                    notifyObserver(std::string("report"),
+                            dynamic_cast<CustomWindow*>(this));
+                } catch (std::exception& e) {
+                    std::cerr << e.what() << '\n';
+                }
+                return 0;
+            }));
+
 
     for (auto it = aH.begin(); it != aH.end(); ++it) {
         actionsL.push_back((*it).generateActionLabels());
@@ -165,20 +162,31 @@ void PatientFileWindow::keyPressed(wxKeyEvent& event) {
 }
 
 void PatientFileWindow::pickPatient() {
-    s4.Clear(0);
+    s4.Clear(0); // 1?
     s4.Add(new LabelledInput(&patientInfos, "first name :", "Pierre-Jean"));
     s4.Add(new LabelledInput(&patientInfos, "last name :", "Lartaud"));
     s4.Add(new LabelledInput(&patientInfos, "birth date:", "Unknown"));
     s4.Add(new LabelledInput(&patientInfos, "unique ID:", "00OLOLO"));
 
-//    fs::path demoPath = "resources/DemoPatient/";
+    setPatientPath(
+            "/home/anael/eclipse-workspace/ImageProject2/resources/DemoPatient/RawData");
+
     fs::path demoImgPath =
             "/home/anael/eclipse-workspace/ImageProject2/resources/DemoPatient/RawData";
-    sIL.appendImageWindows(demoImgPath);
+    patientImages.reset();
+    patientImages.appendImageWindows(demoImgPath);
     fs::path demoReportPath =
             "/home/anael/eclipse-workspace/ImageProject2/resources/DemoPatient/Reports";
-//    sRL.setReports(demoReportPath);
-//    scrolledIcons.FitInside();
-    reports.FitInside();
+    patientReports.getReportIcons()->reset();
+    patientReports.setReports(demoReportPath);
+    fs::path demoPhotoPath =
+            "/home/anael/eclipse-workspace/ImageProject2/resources/DemoPatient/face.jpg";
+    setPatientPhoto(demoPhotoPath);
     Layout();
+}
+
+void PatientFileWindow::setPatientPhoto(fs::path photoPath) {
+    patientPhoto.setBitmap(photoPath);
+    patientPhoto.iconize(wxSize(250, 200));
+
 }

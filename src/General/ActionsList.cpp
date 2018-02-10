@@ -21,6 +21,8 @@ ActionsList::ActionsList(wxWindow* parent) :
     col1.SetText(_("Available action"));
     col1.SetWidth(200);
     shownList.InsertColumn(1, col1);
+//    shownList.setMinClientSize(wxSize(200, 200));
+    shownList.Fit();
 }
 
 void ActionsList::resetList(

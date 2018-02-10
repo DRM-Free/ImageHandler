@@ -28,7 +28,11 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                 }
                 improcFrame->Center();
                 improcFrame->setFocus();
-                dynamic_cast<CustomWindow*> (improcFrame)->setPatientPath(dynamic_cast<CustomWindow*> (content)->getPatientPath());
+                fs::path newPath=content->getPatientPath();
+                if(newPath!="") {
+                    improcFrame->setPatientPath(newPath);
+                std::cout<<"trying to add images from path" <<improcFrame->getPatientPath()<<"\n";
+                    improcFrame->addImage(newPath);}
                 improcFrame->Show(true);
                 content->Hide();
             });
@@ -42,7 +46,10 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                 }
                 patientFileFrame->Center();
                 patientFileFrame->setFocus();
-                dynamic_cast<CustomWindow*> (patientFileFrame)->setPatientPath(dynamic_cast<CustomWindow*> (content)->getPatientPath());
+                //FIXME patient path is not passed properly : null pointer is about to be used
+                fs::path newPath=content->getPatientPath();
+                if(newPath!="") {
+                    patientFileFrame->setPatientPath(newPath);}
                 patientFileFrame->Show(true);
                 content->Hide();
             });
@@ -57,7 +64,9 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                 }
                 reportFrame->Center();
                 reportFrame->setFocus();
-                dynamic_cast<CustomWindow*> (reportFrame)->setPatientPath(dynamic_cast<CustomWindow*> (content)->getPatientPath());
+                fs::path newPath=content->getPatientPath();
+                if(newPath!="") {
+                    reportFrame->setPatientPath(newPath);}
                 reportFrame->Show(true);
                 content->Hide();
             });
@@ -67,7 +76,9 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
             [this](CustomWindow* content, Observed const& observed) -> void
             {
                 homeFrame->setFocus();
-                dynamic_cast<CustomWindow*> (homeFrame)->setPatientPath(dynamic_cast<CustomWindow*> (content)->getPatientPath());
+                fs::path newPath=content->getPatientPath();
+                if(newPath!="") {
+                    homeFrame->setPatientPath(newPath);}
                 homeFrame->Show();
                 content->Hide();
             });

@@ -37,12 +37,12 @@ void ImageWindow::OnDraw(wxDC& dc) {
         dc.SetBrush(wxNullBrush); // blue filling
         dc.SetPen(wxPen(wxColour(110, 20, 240), 10));
 
-        auto minSize = GetMinClientSize();
-        dc.DrawRectangle((minSize.GetWidth() - 200) / 2,
-                (minSize.GetHeight() - 50) / 2, 200, 50);
-        dc.DrawText(wxT("Pick an image to get started !"),
-                (minSize.GetWidth() - 200) / 2 + 10,
-                (minSize.GetHeight() - 50) / 2 + 10);
+//        auto minSize = GetSize();
+//        dc.DrawRectangle((minSize.GetWidth() - 200) / 2,
+//                (minSize.GetHeight() - 50) / 2, 200, 50);
+//        dc.DrawText(wxT("Pick an image to get started !"),
+//                (minSize.GetWidth() - 200) / 2 + 10,
+//                (minSize.GetHeight() - 50) / 2 + 10);
 
     } else {
         int* x = new int;

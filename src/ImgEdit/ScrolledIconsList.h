@@ -36,7 +36,7 @@ public:
     void appendOneImageWindow(fs::path const& imPath);
     void addImageWindowsToSelected(ImageWindow* iW);
     void removeImageWindowsFromSelected(ImageWindow* iW);
-
+    void reset(); //clears all children
     std::vector<ImageWindow*> const& getSelectedImages() const;
     void clearSelected();
 private:

@@ -24,11 +24,11 @@ private:
     wxGridSizer s4;
 //    wxStaticBox scrolledIcons;
     wxStaticBox actions;
-    wxStaticBox reports;
+//    wxStaticBox reports;
     wxStaticBox patientInfos;
-    wxPanel patientPhoto;
-    ScrolledIconsList sIL;
-    ScrolledReportList sRL;
+    ImageWindow patientPhoto;
+    ScrolledIconsList patientImages;
+    ScrolledReportList patientReports;
 
 //-------------------Constructors
 public:
@@ -39,6 +39,7 @@ public:
     void backHome();
     void keyPressed(wxKeyEvent& event);
     void pickPatient();
+    void setPatientPhoto(fs::path photoPath);
 
 private:
 

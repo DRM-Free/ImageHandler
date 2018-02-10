@@ -16,7 +16,7 @@ ScrolledIconsList::ScrolledIconsList(wxWindow* parent) :
          wxBORDER_SIMPLE) */{
 
     sizer = new wxBoxSizer(wxHORIZONTAL);
-    SetMinClientSize(wxSize(300, 300));
+    SetMinSize(wxSize(300, 300));
     SetSizer(sizer);
 
     addAction<std::string, ImageWindow*>("select",
@@ -37,6 +37,7 @@ void ScrolledIconsList::appendOneImageWindow(fs::path const & imPath) {
     imageWindows.push_back(reducedWindow);
     reducedWindow->addObserver(this);
     sizer->Add(reducedWindow, 1, wxALL, 10);
+    Fit();
 }
 
 /**
@@ -65,8 +66,13 @@ void ScrolledIconsList::clearSelected() {
     }
 }
 
-
-
+void ScrolledIconsList::reset() {
+    while (!imageWindows.empty()) {
+        //SEE maybe i should not use destroy but it works (method not supposed to be called by dev)
+        imageWindows.back()->Destroy();
+        imageWindows.pop_back();
+    }
+}
 
 void ScrolledIconsList::setScrolls() {
     int* x = new int;
