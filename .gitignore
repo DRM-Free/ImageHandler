@@ -1,5 +1,6 @@
 .cproject
 .settings
 .project
-
+/counts.mat
+/octave-workspace
 Debug

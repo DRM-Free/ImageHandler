@@ -7,6 +7,7 @@
 
 #include "ActionsHolder.h"
 #include <iostream>
+#include <wx/dialog.h>
 /**
  *
  * @param key
@@ -15,9 +16,10 @@
  * @param behaviour
  */
 ActionsHolder::ActionsHolder(char key, std::string description,
-        std::function<bool()> isActive, std::function<std::any()> behaviour) :
-        key(key), description(description), isActive(isActive), behaviour(
-                behaviour) {
+        std::string const& inactiveMsg, std::function<bool()> isActive,
+        std::function<std::any()> behaviour) :
+        key(key), description(description), inactiveMsg(inactiveMsg), isActive(
+                isActive), behaviour(behaviour) {
 }
 
 ActionsHolder::~ActionsHolder() {
@@ -34,13 +36,20 @@ std::pair<std::string, std::string> ActionsHolder::generateActionLabels() {
 }
 
 std::any ActionsHolder::doBehaviour() {
-    if (key != '\0') {
-        behaviour();
-        return 1;
+    if (isActive()) {
+
+        if (key != '\0') {
+            behaviour();
+            return 1;
+        } else {
+            std::cerr
+                    << "An action with no key assigned was called, this is not supposed to happen !\n";
+            return 1;
+        }
     } else {
-        std::cerr
-                << "An action with no key assigned was called, this is not supposed to happen !\n";
-        return 1;
+        wxMessageDialog dia(nullptr, "Unavailable Action :\n" + inactiveMsg,
+                "Ok");
+        dia.ShowModal();
     }
 }
 

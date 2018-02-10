@@ -50,7 +50,6 @@ private:
     wxBoxSizer* controlSizer;
     ImageWindow* iW;
     ScrolledList* iL;
-    std::vector<ImageWindow*> SelectedImageWindows;
     wxBoxSizer* mainSizer;
     wxStaticBox actions;
 

@@ -22,6 +22,7 @@ private:
 //    std::map<char, KeyAction> registeredActions;
     char key;
     std::string description;
+    std::string inactiveMsg;
     std::function<bool()> isActive;
     std::function<std::any()> behaviour;
 
@@ -35,6 +36,7 @@ public:
      */
 
     ActionsHolder(char key, std::string description,
+            std::string const& inactiveMsg,
             std::function<bool()> isActive,
             std::function<std::any()> behaviour);
     std::pair<std::string, std::string> generateActionLabels();

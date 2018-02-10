@@ -62,7 +62,7 @@ void PatientFileWindow::displayContextualHelp() {
 std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHolder() {
     std::vector<std::pair<std::string, std::string>> actionsL;
 
-    aH.push_back(ActionsHolder(escapeKey, "Back Home", [this]()->bool //
+    aH.push_back(ActionsHolder(escapeKey, "Back Home", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -73,7 +73,7 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
 
     char key = requestKey(); //Request new available keyboard key
 
-    aH.push_back(ActionsHolder(key, "new report", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "new report", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -83,7 +83,8 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
 
     key = requestKey(); //Request new available keyboard key
 
-    aH.push_back(ActionsHolder(key, "Display contextual help", [this]()->bool //
+    aH.push_back(
+            ActionsHolder(key, "Display contextual help", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -94,7 +95,7 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
 
     key = requestKey(); //Request new available keyboard key
 
-    aH.push_back(ActionsHolder(key, "Pick patient", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Pick patient", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -104,7 +105,7 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
         }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Go to data processing", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Go to data processing", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -120,7 +121,7 @@ std::vector<std::pair<std::string, std::string>> PatientFileWindow::setActionsHo
             }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "New report", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "New report", "", [this]()->bool //
             {
                 return true;
             }, [this]()

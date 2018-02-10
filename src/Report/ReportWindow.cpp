@@ -51,7 +51,7 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 
 
     aH.push_back(
-            ActionsHolder(escapeKey, "Back Home", [this]()->bool //
+            ActionsHolder(escapeKey, "Back Home", "", [this]()->bool //
                     {
                         return true;
                     }, [this]()
@@ -62,7 +62,7 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 
     char key = requestKey(); //Request new available keyboard key
 
-    aH.push_back(ActionsHolder(key, "Submit report", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Submit report", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -73,7 +73,8 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 
     key = requestKey(); //Request new available keyboard key
 
-    aH.push_back(ActionsHolder(key, "Display contextual help", [this]()->bool //
+    aH.push_back(
+            ActionsHolder(key, "Display contextual help", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -85,7 +86,7 @@ std::vector<std::pair<std::string, std::string>> ReportWindow::setActionsHolder(
 
     key = requestKey(); //Request new available keyboard key
 
-    aH.push_back(ActionsHolder(key, "Discard report", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Discard report", "", [this]()->bool //
             {
                 return true;
             }, [this]()

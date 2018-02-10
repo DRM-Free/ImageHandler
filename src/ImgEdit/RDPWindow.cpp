@@ -86,7 +86,6 @@ void RDPWindow::addImage(std::vector<std::string> const& imPaths) {
     Refresh();
 }
 
-
 std::string RDPWindow::askJPG() {
     wxFileDialog openFileDialog(this, _("Pick an image"), "", "",
             "jpg files (*.jpg)|*.jpg", wxFD_OPEN);
@@ -106,7 +105,7 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
 
     //###################### ADD NEW ACTIONS DOWN HERE ######################
 
-    aH.push_back(ActionsHolder(escapeKey, "Back to Home", [this]()->bool //
+    aH.push_back(ActionsHolder(escapeKey, "Back to Home", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -116,7 +115,7 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
             }));
 
     char key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Pick image", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Pick image", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -126,7 +125,7 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
             }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Report results", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Report results", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -144,51 +143,73 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
             }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Clear selected", [this]()->bool //
-            {
-                return SelectedImageWindows.size()>=1;
-            }, [this]()
-            {
-                this->iL->clearSelected();
-                return 0;
-            }));
+    aH.push_back(
+            ActionsHolder(key, "Clear selected", "No image selected",
+                    [this]()->bool //
+                    {
+                        return iL->getSelectedImageWindows().size()>=1;
+                    }, [this]()
+                    {
+                        this->iL->clearSelected();
+                        return 0;
+                    }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Enhance blood features", [this]()->bool //
-            {
-                return SelectedImageWindows.size()>=1;
-            }, [this]()
-            {
-                featuresEnhancement();
-                return 0;
-            }));
+    aH.push_back(
+            ActionsHolder(key, "Enhance blood features",
+                    "At least one image should be selected", [this]()->bool //
+                    {
+                        return iL->getSelectedImageWindows().size()>=1;
+                    }, [this]()
+                    {
+                        featuresEnhancement();
+                        return 0;
+                    }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Display cells counts", [this]()->bool //
-            {
-                        return SelectedImageWindows.size()>=1;
-            }, [this]()
-            {
-                std::vector<std::vector<int>> counts = countBC();
+    aH.push_back(
+            ActionsHolder(key, "Display cells counts",
+                    "At least one image should be selected", [this]()->bool //
+                    {
+                        return iL->getSelectedImageWindows().size()>=1;
+                    }, [this]()
+                    {
+                        std::vector<std::vector<int>> counts = countBC();
 
-                for (int i = 0; i<counts.size(); ++i) {
-                    std::cout<< i << "th image features : " << '\n';
-                            std::cout<< "White blood cells count" << counts.at(i).at(0)<<'\n';
-                            std::cout<< "Red blood cells count" << counts.at(i).at(1)<<'\n';
-                            std::cout<< "THR blood cells count" << counts.at(i).at(2)<<'\n';
-                }
-                return 0;
-            }));
+//                        for (uint32_t i = 0; i < counts.size(); ++i) {
+                    std::function<void(int, int)> showMod = [&](int imgNo, int size) {
+                        if (imgNo < size) {
+                            stringstream sstr;
+                            sstr << "Image " << imgNo + 1 << " features : " << '\n';
+                            sstr << "White blood cells count : " << counts.at(imgNo).at(0)<<'\n';
+                            sstr << "Red blood cells count : " << counts.at(imgNo).at(1)<<'\n';
+                            sstr << "THR blood cells count : " << counts.at(imgNo).at(2)<<'\n';
+                            wxMessageDialog* dia = new wxMessageDialog(nullptr, sstr.str(),
+                                    "Ok", wxSTAY_ON_TOP);
+                            dia->ShowWindowModalThenDo([imgNo, size, showMod, dia](int retCode) {
+                                        if (retCode == wxID_OK) {
+                                            showMod(imgNo+1, size);
+                                        }
+                                        dia->Destroy();
+                                    });
+                        }
+                    };
+                    showMod(0, counts.size());
+//                        }
+                    return 0;
+                }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Make tuple", [this]()->bool //
-            {
-                return SelectedImageWindows.size()>=2;
-            }, [this]
-            {
-                makeTuple();
-                return 0;
-            }));
+    aH.push_back(
+            ActionsHolder(key, "Make tuple",
+                    "At least two images should be selected", [this]()->bool //
+                    {
+                        return iL->getSelectedImageWindows().size()>=2;
+                    }, [this]
+                    {
+                        makeTuple();
+                        return 0;
+                    }));
     //###################### ADD NEW ACTIONS UP HERE ######################
 
     for (auto it = aH.begin(); it != aH.end(); ++it) {

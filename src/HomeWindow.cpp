@@ -32,7 +32,7 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
 
 //    actionsL.push_back(std::make_pair("h", "Display contextual help"));
     aH.push_back(
-            ActionsHolder(escapeKey, "Quit application", [this]()->bool //
+            ActionsHolder(escapeKey, "Quit application", "", [this]()->bool //
                     {
                         return true;
                     }, [this]()
@@ -42,7 +42,7 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
                     }));
 
     char key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "New report", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "New report", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -58,7 +58,8 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
             }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Display contextual help", [this]()->bool //
+    aH.push_back(
+            ActionsHolder(key, "Display contextual help", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -68,7 +69,7 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
             }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Process raw data", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Process raw data", "", [this]()->bool //
             {
                 return true;
             }, [this]()
@@ -84,7 +85,7 @@ std::vector<std::pair<std::string, std::string>> HomeWindow::setActionsHolder() 
         }));
 
     key = requestKey(); //Request new available keyboard key
-    aH.push_back(ActionsHolder(key, "Browse patient data", [this]()->bool //
+    aH.push_back(ActionsHolder(key, "Browse patient data", "", [this]()->bool //
             {
                 return true;
             }, [this]()
