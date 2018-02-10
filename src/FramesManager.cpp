@@ -31,8 +31,10 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                 fs::path newPath=content->getPatientPath();
                 if(newPath!="") {
                     improcFrame->setPatientPath(newPath);
-                std::cout<<"trying to add images from path" <<improcFrame->getPatientPath()<<"\n";
-                    improcFrame->addImage(newPath);}
+                    std::cout<<"trying to add images from path : " <<newPath<<"\n";
+                    //FIXME patient path is passed properly but addImage crashes
+                    improcFrame->addImage(newPath);
+                }
                 improcFrame->Show(true);
                 content->Hide();
             });
@@ -46,7 +48,6 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                 }
                 patientFileFrame->Center();
                 patientFileFrame->setFocus();
-                //FIXME patient path is not passed properly : null pointer is about to be used
                 fs::path newPath=content->getPatientPath();
                 if(newPath!="") {
                     patientFileFrame->setPatientPath(newPath);}

@@ -89,3 +89,7 @@ ScrolledIconsList::~ScrolledIconsList() {
 std::vector<ImageWindow*> const& ScrolledIconsList::getSelectedImages() const {
     return selectedImageWindows;
 }
+
+ImageWindow* ScrolledIconsList::getLastImageWindow() {
+    return imageWindows.back();
+}

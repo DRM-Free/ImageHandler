@@ -67,10 +67,9 @@ void RDPWindow::pickImage() { //Crashes in pickimage
 }
 
 void RDPWindow::addImage(std::string imPath) {
-    iW->setBitmap(imPath);
     ScrolledIconsList* sIL = new ScrolledIconsList(iL);
     sIL->appendImageWindows(imPath);
-
+    iW->setBitmap(sIL->getLastImageWindow()->getImPath());
     iL->addScrolledIconsList(sIL);
     Refresh();
 }

@@ -43,7 +43,7 @@ private:
     void setScrolls();
 //-------------------Getters&Setters
 public:
-
+    ImageWindow* getLastImageWindow();
 private:
 
 };
