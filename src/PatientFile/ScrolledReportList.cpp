@@ -17,8 +17,12 @@ ScrolledReportList::ScrolledReportList(wxWindow* parent) :
 }
 
 void ScrolledReportList::setReports(fs::path reportspath) {
-    for (auto &it : fs::directory_iterator(reportspath)) {
+//    for (auto &it : fs::directory_iterator(reportspath)) {
         reportIcons.appendImageWindows(
                 "/home/anael/eclipse-workspace/ImageProject2/resources/file.jpg");
-        }
+//        }
+}
+
+ScrolledIconsList* ScrolledReportList::getReportIcons() {
+    return &reportIcons;
 }

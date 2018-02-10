@@ -12,7 +12,8 @@
 #include <iostream>
 
 ScrolledIconsList::ScrolledIconsList(wxWindow* parent) :
-        wxScrolledWindow(parent, wxID_ANY) {
+        wxScrolledWindow(parent, wxID_ANY, wxPoint(1, 1), wxSize(-1, -1))/*,
+         wxBORDER_SIMPLE) */{
 
     sizer = new wxBoxSizer(wxHORIZONTAL);
     SetMinClientSize(wxSize(300, 300));
@@ -30,31 +31,27 @@ ScrolledIconsList::ScrolledIconsList(wxWindow* parent) :
 
 }
 
+void ScrolledIconsList::appendOneImageWindow(fs::path const & imPath) {
+    ImageWindow* reducedWindow = new ImageWindow(this, imPath);
+    reducedWindow->iconize(wxSize(280, 280));
+    imageWindows.push_back(reducedWindow);
+    reducedWindow->addObserver(this);
+    sizer->Add(reducedWindow, 1, wxALL, 10);
+}
+
 /**
  *
  * @param imPath is a path to image or image folder
  */
 void ScrolledIconsList::appendImageWindows(fs::path const& imPath) {
-    //TEST icons creation is shunted
     if (imPath.has_extension()) {
 //    if (false) {
-    ImageWindow* reducedWindow = new ImageWindow(this, imPath);
-    reducedWindow->iconize();
-    imageWindows.push_back(reducedWindow);
-//    reducedWindow->SetMinClientSize(wxSize(280, 280));
-        reducedWindow->addObserver(this);
-    sizer->Add(reducedWindow, 1, wxALL, 10);
+        appendOneImageWindow(imPath);
     }
 
     else {
-        //FIXME In this case, images are not created properly
         for (auto &it : fs::directory_iterator(imPath)) {
-            ImageWindow* reducedWindow = new ImageWindow(this, it);
-            reducedWindow->iconize();
-            imageWindows.push_back(reducedWindow);
-            //    reducedWindow->SetMinClientSize(wxSize(280, 280));
-            reducedWindow->addObserver(this);
-            sizer->Add(reducedWindow, 1, wxALL, 10);
+            appendOneImageWindow(it);
         }
     }
     FitInside();
@@ -68,9 +65,7 @@ void ScrolledIconsList::clearSelected() {
     }
 }
 
-//void appendImageWindows(fs::path path) {
-//
-//}
+
 
 
 void ScrolledIconsList::setScrolls() {
@@ -88,5 +83,3 @@ ScrolledIconsList::~ScrolledIconsList() {
 std::vector<ImageWindow*> const& ScrolledIconsList::getSelectedImages() const {
     return selectedImageWindows;
 }
-//void ScrolledIconsList::appendImageWindows(fs::path path) {
-//}

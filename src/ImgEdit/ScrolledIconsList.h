@@ -16,7 +16,6 @@
 #include <map>
 #include <experimental/filesystem>
 
-
 class ScrolledIconsList: public wxScrolledWindow, public Observer {
 //-------------------Attributes
 private:
@@ -34,6 +33,7 @@ private:
 //-------------------Methods
 public:
     void appendImageWindows(fs::path const& imPath); //adds images from all files in a directory or single file
+    void appendOneImageWindow(fs::path const& imPath);
     void addImageWindowsToSelected(ImageWindow* iW);
     void removeImageWindowsFromSelected(ImageWindow* iW);
 

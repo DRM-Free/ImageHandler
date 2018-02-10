@@ -20,6 +20,7 @@ public:
     ScrolledReportList(wxWindow* parent);
     virtual ~ScrolledReportList();
     void setReports(fs::path reportspath);
+    ScrolledIconsList* getReportIcons();
 private:
     ScrolledIconsList reportIcons;
 //-------------------Methods

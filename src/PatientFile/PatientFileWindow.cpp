@@ -12,35 +12,43 @@
 PatientFileWindow::PatientFileWindow() :
         CustomWindow(WindowType::PATIENT_MANAGER, "Patient manager"), s1(
                 wxVERTICAL), s2(wxHORIZONTAL), s3(wxVERTICAL), s4(2,
-                0, 0), scrolledIcons(
+                0, 0), actions(
                 this, wxID_ANY,
-                "Images in patient folder"), actions(this, wxID_ANY,
                 "Actions list"), reports(this, wxID_ANY, "Saved reports"), patientInfos(
                 this, wxID_ANY, "Patient infos"), patientPhoto(
-                this), sIL(&scrolledIcons), sRL(&reports) {
+                this), sIL(this), sRL(&reports) {
+//        CustomWindow(WindowType::PATIENT_MANAGER, "Patient manager"), s1(
+//                wxVERTICAL), s2(wxHORIZONTAL), s3(wxVERTICAL), s4(2,
+//                0, 0), scrolledIcons(
+//                this, wxID_ANY,
+//                "Images in patient folder"), actions(this, wxID_ANY,
+//                "Actions list"), reports(this, wxID_ANY, "Saved reports"), patientInfos(
+//                this, wxID_ANY, "Patient infos"), patientPhoto(
+//                this), sIL(&scrolledIcons), sRL(&reports) {
 
     getAl()->getShownList()->Bind(wxEVT_CHAR, &PatientFileWindow::keyPressed,
             this);
 
 
-    scrolledIcons.SetMinSize(wxSize(100, 100));
+    sIL.SetMinSize(wxSize(100, 100));
+//    scrolledIcons.SetMinSize(wxSize(100, 100));
+
     actions.SetMinSize(wxSize(300, 200));
 
-    //Tests
-//    dynamic_cast<wxListCtrl*>(getAl())->SetParent(&actions);
     getAl()->getShownList()->SetParent(&patientInfos);
     wxBoxSizer *actionsSizer = new wxBoxSizer(wxVERTICAL);
     actions.SetSizer(actionsSizer);
     actionsSizer->Add(getAl()->getShownList(), 1, wxALL, 20);
 //tests
     reports.SetMinSize(wxSize(100, 100));
-//    patientInfos.SetMinSize(wxSize(300, 100));
     SetSize(wxSize(1500, 800));
     Center();
 
     SetSizer(&s1, true);
     s1.Add(&s2, 2, wxEXPAND);
-    s1.Add(&scrolledIcons, 1, wxEXPAND);
+
+    s1.Add(&sIL, 1, wxEXPAND);
+//    s1.Add(&scrolledIcons, 1, wxEXPAND);
 
     s2.Add(&s3, 1, wxEXPAND);
     s2.Add(&patientInfos, 1, wxEXPAND);
@@ -54,8 +62,12 @@ PatientFileWindow::PatientFileWindow() :
     patientInfos.SetSizer(&s4, true);
 
 
-    actions.Fit();
-    patientInfos.Fit();
+//    actions.Fit();
+//    patientInfos.Fit();
+
+    //Test sizer for reports
+//    wxBoxSizer* reportsizer = new wxBoxSizer(wxHORIZONTAL);
+//    reportsizer->Add(sRL.getReportIcons(), 1, wxEXPAND);
 
     Layout();
 }
@@ -165,6 +177,8 @@ void PatientFileWindow::pickPatient() {
     sIL.appendImageWindows(demoImgPath);
     fs::path demoReportPath =
             "/home/anael/eclipse-workspace/ImageProject2/resources/DemoPatient/Reports";
-    sRL.setReports(demoReportPath);
+//    sRL.setReports(demoReportPath);
+//    scrolledIcons.FitInside();
+    reports.FitInside();
     Layout();
 }

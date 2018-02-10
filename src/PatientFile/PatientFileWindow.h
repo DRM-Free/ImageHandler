@@ -22,7 +22,7 @@ private:
     wxBoxSizer s2;
     wxBoxSizer s3;
     wxGridSizer s4;
-    wxStaticBox scrolledIcons;
+//    wxStaticBox scrolledIcons;
     wxStaticBox actions;
     wxStaticBox reports;
     wxStaticBox patientInfos;
