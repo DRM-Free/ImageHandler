@@ -17,12 +17,13 @@
 #include <experimental/filesystem>
 
 
-class ScrolledIconsList: public wxScrolledWindow {
+class ScrolledIconsList: public wxScrolledWindow, public Observer {
 //-------------------Attributes
 private:
     //Map for quick data retrieval by iW*
     //SEE iWBEB to be removed
     std::vector<ImageWindow*> imageWindows;
+    std::vector<ImageWindow*> selectedImageWindows;
     wxBoxSizer *sizer;
 //-------------------Constructors
 public:
@@ -36,6 +37,8 @@ public:
     void addImageWindowsToSelected(ImageWindow* iW);
     void removeImageWindowsFromSelected(ImageWindow* iW);
 
+    std::vector<ImageWindow*> const& getSelectedImages() const;
+    void clearSelected();
 private:
     void setScrolls();
 //-------------------Getters&Setters

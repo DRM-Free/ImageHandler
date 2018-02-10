@@ -18,6 +18,16 @@ ScrolledIconsList::ScrolledIconsList(wxWindow* parent) :
     SetMinClientSize(wxSize(300, 300));
     SetSizer(sizer);
 
+    addAction<std::string, ImageWindow*>("select",
+            [this](ImageWindow* content, Observed const& observed) -> void
+            {
+                if (content->isSelected()) {
+                    selectedImageWindows.push_back(content);
+                } else {
+                    selectedImageWindows.erase(std::find(selectedImageWindows.begin(), selectedImageWindows.end(), content));
+                }
+            });
+
 }
 
 /**
@@ -32,7 +42,7 @@ void ScrolledIconsList::appendImageWindows(fs::path const& imPath) {
     reducedWindow->iconize();
     imageWindows.push_back(reducedWindow);
 //    reducedWindow->SetMinClientSize(wxSize(280, 280));
-    reducedWindow->addObserver(dynamic_cast<ScrolledList*>(GetParent()));
+        reducedWindow->addObserver(this);
     sizer->Add(reducedWindow, 1, wxALL, 10);
     }
 
@@ -43,13 +53,19 @@ void ScrolledIconsList::appendImageWindows(fs::path const& imPath) {
             reducedWindow->iconize();
             imageWindows.push_back(reducedWindow);
             //    reducedWindow->SetMinClientSize(wxSize(280, 280));
-            reducedWindow->addObserver(
-                    dynamic_cast<ScrolledList*>(GetParent()));
+            reducedWindow->addObserver(this);
             sizer->Add(reducedWindow, 1, wxALL, 10);
         }
     }
     FitInside();
     setScrolls();
+}
+
+void ScrolledIconsList::clearSelected() {
+    while (!selectedImageWindows.empty()) {
+        selectedImageWindows.back()->switchSelected();
+        selectedImageWindows.pop_back();
+    }
 }
 
 //void appendImageWindows(fs::path path) {
@@ -69,5 +85,8 @@ ScrolledIconsList::~ScrolledIconsList() {
 
 }
 
+std::vector<ImageWindow*> const& ScrolledIconsList::getSelectedImages() const {
+    return selectedImageWindows;
+}
 //void ScrolledIconsList::appendImageWindows(fs::path path) {
 //}

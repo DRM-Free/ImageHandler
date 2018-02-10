@@ -17,15 +17,6 @@ ScrolledList::ScrolledList(wxWindow* parent) :
     SetSizer(sizer);
     setScrolls();
 
-    addAction<std::string, ImageWindow*>("select",
-            [this](ImageWindow* content, Observed const& observed) -> void
-            {
-                if (content->isSelected()) {
-                    selectedImageWindows.push_back(content);
-                } else {
-                    selectedImageWindows.erase(std::find(selectedImageWindows.begin(), selectedImageWindows.end(), content));
-                }
-            });
 }
 
 /**
@@ -43,12 +34,13 @@ void ScrolledList::addScrolledIconsList(ScrolledIconsList* list) {
  *
  * @return pointer vecor to all selected bitmaps within sublists
  */
-std::vector<ImageWindow*> const& ScrolledList::getSelectedImageWindows() const {
-    return selectedImageWindows;
-}
-
-int ScrolledList::getSelectedImagesCount() const {
-    return selectedImageWindows.size();
+std::vector<ImageWindow*> ScrolledList::getSelectedImageWindows() const {
+    std::vector<ImageWindow*> ret;
+    for (auto iL : scrolledIconsLists) {
+        std::vector<ImageWindow*> const& vecTmp = iL->getSelectedImages();
+        ret.insert(ret.end(), vecTmp.begin(), vecTmp.end());
+    }
+    return ret;
 }
 
 void ScrolledList::setScrolls() {
@@ -62,8 +54,7 @@ ScrolledList::~ScrolledList() {
 }
 
 void ScrolledList::clearSelected() {
-    while (!selectedImageWindows.empty()) {
-        selectedImageWindows.back()->switchSelected();
-        selectedImageWindows.pop_back();
+    for (auto iL : scrolledIconsLists) {
+        iL->clearSelected();
     }
 }

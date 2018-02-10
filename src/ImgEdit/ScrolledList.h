@@ -12,12 +12,11 @@
 #include "ScrolledIconsList.h"
 #include <vector>
 
-class ScrolledList: public wxScrolledWindow, public Observer {
+class ScrolledList: public wxScrolledWindow {
 //-------------------Attributes
 private:
     wxBoxSizer *sizer;
     std::vector<ScrolledIconsList*> scrolledIconsLists;
-    std::vector<ImageWindow*> selectedImageWindows;
 //-------------------Constructors
 public:
     ScrolledList(wxWindow* parent);
@@ -28,9 +27,8 @@ private:
 //-------------------Methods
 public:
     void addScrolledIconsList(ScrolledIconsList*);
-//    void updateSelectedImageWindows();
-    std::vector<ImageWindow*> const& getSelectedImageWindows() const;
-    int getSelectedImagesCount() const;
+//  void updateSelectedImageWindows();
+    std::vector<ImageWindow*> getSelectedImageWindows() const;
     void clearSelected();
 
 private:
