@@ -37,13 +37,12 @@ public:
     void backHome();
     void makeTuple();
     bool isAllowedToClose();
-    void checkSelected(); //Processes and updates the number of selected images
     std::vector<std::pair<std::string, std::string>> setActionsHolder()
             override;
     std::vector<std::vector<int>> countBC();
     void featuresEnhancement();
-    std::vector<ImageWindow> getSelectedImg();
-;
+    void reset();
+    void displaySelection();
     //TODO : add methods for adding selected images to report
 private:
     bool shouldNotclose;

@@ -21,6 +21,7 @@ private:
 public:
     ScrolledList(wxWindow* parent);
     virtual ~ScrolledList();
+    int size();
 
 private:
 

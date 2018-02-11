@@ -58,3 +58,7 @@ void ScrolledList::clearSelected() {
         iL->clearSelected();
     }
 }
+
+int ScrolledList::size() {
+    return scrolledIconsLists.size();
+}

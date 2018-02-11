@@ -125,6 +125,31 @@ std::vector<std::pair<std::string, std::string>> RDPWindow::setActionsHolder() {
             }));
 
     key = requestKey(); //Request new available keyboard key
+    aH.push_back(
+            ActionsHolder(key, "Display selection",
+                    "Only one image should be selected", [this]()->bool //
+                    {
+                        return iL->getSelectedImageWindows().size()==1;
+                    }, [this]()
+                    {
+                        displaySelection();
+                        return 0;
+                    }));
+
+    key = requestKey(); //Request new available keyboard key
+    aH.push_back(
+            ActionsHolder(key, "Close all images",
+                    "Only one image should be selected", [this]()->bool //
+                    {
+                        return iL->size()>=1;
+                    }, [this]()
+                    {
+                        reset();
+                        return 0;
+                    }));
+
+
+    key = requestKey(); //Request new available keyboard key
     aH.push_back(ActionsHolder(key, "Report results", "", [this]()->bool //
             {
                 return true;
@@ -281,4 +306,16 @@ void RDPWindow::featuresEnhancement() {
     std::cout << "Processed images have been saved" << '\n';
     addImage(imPaths);
     iL->clearSelected();
+}
+
+void RDPWindow::reset() {
+    iL->Destroy();
+    iL = new ScrolledList(this);
+    controlSizer->Add(iL, 1, wxEXPAND);
+    Layout();
+}
+
+void RDPWindow::displaySelection() {
+    iW->setBitmap((iL->getSelectedImageWindows().back()->getImPath()));
+    iW->Refresh(true);
 }

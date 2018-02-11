@@ -33,6 +33,7 @@ FramesManager::FramesManager(HomeWindow* firstFrame) :
                     improcFrame->setPatientPath(newPath);
                     std::cout<<"trying to add images from path : " <<newPath<<"\n";
                     //FIXME patient path is passed properly but addImage crashes
+                    improcFrame->reset();
                     improcFrame->addImage(newPath);
                 }
                 improcFrame->Show(true);
